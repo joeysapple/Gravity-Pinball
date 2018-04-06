@@ -25,6 +25,7 @@ public class Rocket {
     private Circle bounds;
     private Vector2 oldAcc;
 
+
     /**
      * Pretpostavljeni konstruktor
      */
@@ -55,15 +56,15 @@ public class Rocket {
          */
         Vector2 posDiff = new Vector2(PlayState.otherCirclePos.x,PlayState.otherCirclePos.y);
         posDiff.sub(this.position);
-        System.out.println("u stvaranju razlika pozicije" + " "+ posDiff);
-        System.out.println("u stvaranju razlika pozicije num2" + " "+ posDiff.len2());
-        System.out.println("u stvaranju acc num" + " "+ ((float)PlayState.G*100/posDiff.len2()));
+     //   System.out.println("u stvaranju razlika pozicije" + " "+ posDiff);
+     //   System.out.println("u stvaranju razlika pozicije num2" + " "+ posDiff.len2());
+     //   System.out.println("u stvaranju acc num" + " "+ ((float)PlayState.G*100/posDiff.len2()));
         // Vector2 acc = new Vector2(posDiff.x,posDiff.y);
         float magnitude = (float)PlayState.G*100/posDiff.len2();
         posDiff.nor();
         posDiff.scl(magnitude);
         oldAcc = new Vector2(posDiff.x,posDiff.y);
-        System.out.println("u stvaranju acc" + " "+ posDiff);
+      //  System.out.println("u stvaranju acc" + " "+ posDiff);
      //   circle = new Sprite("rocket.png");
     }
 
@@ -122,17 +123,21 @@ public class Rocket {
      * @param planet Planet koji djeluje na raketu
      */
     public void update(float dt, Planet planet){
-        /*float acc = 0.001f*(300-position.x)*(300-position.x);
-        if (position.y>300) acc*=-1;
-        float dvy = acc*dt;
-        velocity.add(0,dvy);
-        float dy = velocity.y*dt;
-        System.out.println(dy);
-        position.add(0,dy);*/
-        System.out.println("pozicija prije" + " " + position);
-        System.out.println("akceleracija prije" + " " + oldAcc);
-        System.out.println("brzina prije" + " " + velocity);
-        position.add(dt*(velocity.x+dt*oldAcc.x/2),dt*(velocity.y+dt*oldAcc.y/2));
+
+        Vector2 posDiff = new Vector2(this.position.x,this.position.y);
+        posDiff.sub(planet.getPosition());
+
+    //    System.out.println("Razlika pozicije " + posDiff);
+        double posDiffLength2 = posDiff.len2();
+    //    System.out.println("Razlika pozicije duljina " + posDiffLength2);
+        posDiff.setLength((float) ((float) PlayState.G*planet.getMass()/posDiffLength2)).scl(-1);
+    //    System.out.println("Sila " + posDiff);
+        posDiff.add(this.acceleration);
+        this.position.add(this.velocity.x*dt,this.velocity.y*dt)
+                                        .add((float)0.5*dt*dt*posDiff.x,(float)0.5*dt*dt*posDiff.y);
+
+        this.velocity.add(posDiff.x*dt,posDiff.y*dt);
+      /*  position.add(dt*(velocity.x+dt*oldAcc.x/2),dt*(velocity.y+dt*oldAcc.y/2));
         System.out.println("Pozicija" + " "+position);
         Vector2 posDiff = new Vector2(planet.getPosition().x,planet.getPosition().y);
         posDiff.sub(this.position);
@@ -145,8 +150,10 @@ public class Rocket {
         setAcceleration(0,0);
         velocity.add(dt*(oldAcc.x+posDiff.x)/2,dt*(oldAcc.y+posDiff.y)/2);
         oldAcc.set(posDiff.x,posDiff.y);
-        System.out.println("duljuna framea" + " "+dt);
+        System.out.println("duljuna framea" + " "+dt);*/
         bounds.setPosition(position.x,position.y);
+        setAcceleration(0,0);
+
        /* position.add(velocity.x*dt,velocity.y*dt);
         System.out.println("Brzina glavna " + velocity);
         bounds.setPosition(position.x,position.y);*/

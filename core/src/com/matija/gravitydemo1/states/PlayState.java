@@ -25,10 +25,10 @@ public class PlayState extends State {
 
     private Sprite backroundSprite;
     private Music music;
-
+    public boolean potisak = true;
     public final static Vector2 otherCirclePos = new Vector2(GravityDemo1.WIDTH/4,250);
     public final static double G = 1000.0f;
-
+    boolean noviKvadrat = false;
     private PositionSimulator ps;
 
     /**
@@ -45,7 +45,7 @@ public class PlayState extends State {
         /*
         Instanciranje rakete i planeta
          */
-        rocket = new Rocket(new Vector2(GravityDemo1.WIDTH/4,50),new Vector2((float) 1,0),new Vector2(0,0),1);
+        rocket = new Rocket(new Vector2(GravityDemo1.WIDTH/4,50),new Vector2((float) 20,0),new Vector2(0,0),1);
         planet = new Planet(new Vector2(GravityDemo1.WIDTH/4,250),new Vector2(0,0),new Vector2(0,0),100);
 
         /*
@@ -74,7 +74,8 @@ public class PlayState extends State {
     public void handleInput() {
         if (Gdx.input.isTouched()){
             rocket.setAcceleration(4,0);
-            System.out.println("pritisak");
+           // System.out.println("pritisak");
+            potisak = true;
         }
     }
 
@@ -89,8 +90,17 @@ public class PlayState extends State {
         float x = rocket.getPosition().x;
         float y = rocket.getPosition().y;   //dohvaća se trenutna pozicija rakete
 
+
+
         rocket.update(dt,planet);   //ažuriraju se parametri rakete
-        ps.simulate(dt);    //simulacija putanje na temelju trenutnih parametara
+
+        if (potisak || noviKvadrat){
+            ps.simulate(dt);    //simulacija putanje na temelju trenutnih parametara
+            potisak = false;
+            noviKvadrat = false;
+        }
+
+
 
         cam.position.x = cam.position.x + (rocket.getPosition().x - x);
         cam.position.y = cam.position.y + (rocket.getPosition().y - y); //pomicanje kamere
@@ -103,7 +113,8 @@ public class PlayState extends State {
     public void render(SpriteBatch sb) {
         sb.setProjectionMatrix(cam.combined);
         sb.begin();
-
+       // cam.zoom = 5.0f;
+        backroundSprite.setCenter(cam.position.x,cam.position.y);
         backroundSprite.draw(sb); //iscrtanjanje pozadine
 
         /*
@@ -123,17 +134,21 @@ public class PlayState extends State {
         Provjera je li došlo do sudara. Ukoliko jest, igra završava
          */
         if (planet.getBounds().overlaps(rocket.getBounds())){
-            System.out.println("preklapanje");
+           // System.out.println("preklapanje");
             gsm.set(new PlayState(gsm));
         }
 
         /*
         Iscrtavanje putanje
          */
+        if (ps.getRockets().get(0).getBounds().overlaps(rocket.getBounds())){
+          //  noviKvadrat = true;
+        }
         for (Rocket r:ps.getRockets()){
             sb.draw(r.getRocketSprite(),r.getPosition().x-2, r.getPosition().y-2,5,5);
             if (planet.getBounds().overlaps(r.getBounds())) break;
            // System.out.println("hah" + r.getPosition().x + " "+r.getPosition().y);
+
         }
         sb.end();
     }
