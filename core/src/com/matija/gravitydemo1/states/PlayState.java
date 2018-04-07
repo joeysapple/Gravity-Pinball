@@ -94,11 +94,11 @@ public class PlayState extends State {
 
         rocket.update(dt,planet);   //ažuriraju se parametri rakete
 
-        if (potisak || noviKvadrat){
-            ps.simulate(dt);    //simulacija putanje na temelju trenutnih parametara
+
+            ps.simulate(dt,potisak);    //simulacija putanje na temelju trenutnih parametara
             potisak = false;
             noviKvadrat = false;
-        }
+
 
 
 
@@ -113,7 +113,7 @@ public class PlayState extends State {
     public void render(SpriteBatch sb) {
         sb.setProjectionMatrix(cam.combined);
         sb.begin();
-       // cam.zoom = 5.0f;
+      //  cam.zoom = 5.0f;
         backroundSprite.setCenter(cam.position.x,cam.position.y);
         backroundSprite.draw(sb); //iscrtanjanje pozadine
 
@@ -150,6 +150,8 @@ public class PlayState extends State {
            // System.out.println("hah" + r.getPosition().x + " "+r.getPosition().y);
 
         }
+
+
         sb.end();
     }
 

@@ -7,6 +7,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.matija.gravitydemo1.states.PlayState;
 
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * Created by Korisnik on 31.3.2018..
  */
@@ -17,14 +20,22 @@ import com.matija.gravitydemo1.states.PlayState;
 public class PositionSimulator {
     private Rocket rocket;
     private Planet planet;
-    Array<Rocket> rockets;
+    LinkedList<Rocket> rockets;
+  //  public LinkedList<Rocket> mockedRockets;
     Vector2 position;
     Vector2 velocity;
     Vector2 positionNorm;
     Vector2 thetaNorm;
     double planetMass;
     double rocketMass;
-
+    double rocketDistance;
+    private double theta;
+    private double theta0;
+    private double thetaPom;
+    private double epsilon;
+    private double r0;
+    private double increment;
+    private Vector2 vec1;
     /**
      * Konstruktor
      * @param rocket Raketa za koju se vrši predikcija putanje
@@ -32,35 +43,67 @@ public class PositionSimulator {
      */
     public PositionSimulator(Rocket rocket, Planet planet){
         this.rocket = rocket;
-        rockets = new Array<Rocket>();
+        rockets = new LinkedList<Rocket>();
+     //   mockedRockets = new LinkedList<Rocket>();
         position = new Vector2();
         velocity = new Vector2();
         positionNorm = new Vector2();
         thetaNorm = new Vector2();
         planetMass = planet.getMass();
         rocketMass = rocket.getMass();
+        vec1 = new Vector2();
         this.planet = planet;
 
-        for (double theta = 0;theta <= Math.PI;theta+=0.1 ){
+        for (double theta = 0;theta <= Math.PI/2;theta+=0.1 ){
 
             rockets.add(new Rocket(new Vector2(0,0), new Vector2(0,0), new Vector2(0,0),1));
             Texture texture = new Texture(Gdx.files.internal("dot.jpg"));
             texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
-            rockets.peek().setTexture(new Sprite(texture));
-            rockets.peek().setBounds(new com.badlogic.gdx.math.Circle(0,0,2 ));
+            rockets.peekLast().setTexture(new Sprite(texture));
+            rockets.peekLast().setBounds(new com.badlogic.gdx.math.Circle(0,0,2 ));
+
+        /*    mockedRockets.add(new Rocket(new Vector2(0,0), new Vector2(0,0), new Vector2(0,0),1));
+            Texture texture1 = new Texture(Gdx.files.internal("dotM.jpg"));
+            texture1.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+
+            mockedRockets.peekLast().setTexture(new Sprite(texture1));
+            mockedRockets.peekLast().setBounds(new com.badlogic.gdx.math.Circle(0,0,2 ));*/
         }
     }
 
+
+    public void simulate(float dt, boolean simulate){
+        Rocket r = rockets.get(0);
+        double newRocketDistance = (Vector2.dst(r.getPosition().x,r.getPosition().y,rocket.getPosition().x,rocket.getPosition().y));
+
+
+        if (r.getBounds().overlaps(rocket.getBounds())){
+            this.move();
+            System.out.println("trebalo bi se pomaknuti");
+            return;
+        }
+
+        if (newRocketDistance>rocketDistance){
+            newTrajectory(dt);
+            return;
+        }
+        else{
+            rocketDistance = newRocketDistance;
+        }
+
+       if (simulate) this.newTrajectory(dt);
+    }
     /**
      * Metoda koja služi za predviđanje putanje. Koristi se Keplerova jednadžba
      * @param dt
      */
-    public void simulate(float dt){
+
+    private void newTrajectory(float dt){
         position.set(rocket.getPosition().x - planet.getPosition().x,rocket.getPosition().y - planet.getPosition().y);
         velocity.set(rocket.getVelocity().x,rocket.getVelocity().y);
         System.out.println("Brzina" + " " + velocity);
-        double theta0 = Math.atan2(position.y,position.x);
+        theta0 = Math.atan2(position.y,position.x);
 
     //    System.out.println("Theta je " + + theta0);
       //  System.out.println("Pozicija  " + + position.x + " "+position.y);
@@ -87,15 +130,15 @@ public class PositionSimulator {
         double L = mi * positionDistance*positionDistance*angleVelocity;
       //  System.out.println("h" + h);
         double E = 0.5*mi*(velocityLength*velocityLength) - PlayState.G*planetMass*rocketMass/positionDistance;
-        double epsilon = Math.sqrt(1+(2*E*L*L)/(mi*(PlayState.G*planetMass*rocketMass)*(PlayState.G*planetMass*rocketMass)));
-        double r0 = L*L/(mi*PlayState.G*planetMass*rocketMass);
+        epsilon = Math.sqrt(1+(2*E*L*L)/(mi*(PlayState.G*planetMass*rocketMass)*(PlayState.G*planetMass*rocketMass)));
+        r0 = L*L/(mi*PlayState.G*planetMass*rocketMass);
 
        // System.out.println("A" + A);
 
       //  System.out.println(e);
 
         double v0arg = Math.atan2(velocity.y,velocity.x);
-        double thetaPom = Math.acos((1-(r0/positionDistance))/epsilon);
+        thetaPom = Math.acos((1-(r0/positionDistance))/epsilon);
 
         System.out.println("r unit" + " "+ positionNorm);
         System.out.println("theta unit" + " "+ thetaNorm);
@@ -106,31 +149,79 @@ public class PositionSimulator {
         System.out.println("epsilon " + epsilon);
         System.out.println("E "+ E );
         System.out.println("L "+ L );
-        if (Math.tan(v0arg)<0){
-            thetaPom = -thetaPom;
-        }
 
-        int index = 0;
-        double increment = 0.1;
+        increment = 0.1;
         if (angleVelocity<0) increment=-0.1;
-        for (double theta = theta0; index < rockets.size;theta+=increment ){
-            double r = r0/(1-epsilon*Math.cos(theta-theta0-thetaPom));
+        theta = theta0+increment;
 
-            float x = (float) ((float) r*Math.cos(theta)) + planet.getPosition().x;
-            float y = (float) ((float) r*Math.sin(theta)) + planet.getPosition().y;
 
-            rockets.get(index).setPosition(x,y);
+        double r = r0/(1-epsilon*Math.cos(theta+2*increment-theta0-thetaPom));
+
+        float x = (float) ((float) r*Math.cos(theta+2*increment)) + planet.getPosition().x;
+        float y = (float) ((float) r*Math.sin(theta+2*increment)) + planet.getPosition().y;
+
+        double dis1 = Vector2.dst(rocket.getPosition().x,rocket.getPosition().y,x,y);
+        vec1.set(x-rocket.getPosition().x,y-rocket.getPosition().y);
+        double angle1 = Math.abs(Math.atan2(vec1.y,vec1.x)-Math.atan2(rocket.getVelocity().y,rocket.getVelocity().x));
+        r = r0/(1-epsilon*Math.cos(theta+2*increment-theta0+thetaPom));
+        x = (float) ((float) r*Math.cos(theta+2*increment)) + planet.getPosition().x;
+        y = (float) ((float) r*Math.sin(theta+2*increment)) + planet.getPosition().y;
+
+        double dis2 = Vector2.dst(rocket.getPosition().x,rocket.getPosition().y,x,y);
+        vec1.set(x-rocket.getPosition().x,y-rocket.getPosition().y);
+        double angle2 = Math.abs(Math.atan2(vec1.y,vec1.x)-Math.atan2(rocket.getVelocity().y,rocket.getVelocity().x));
+        if (angle2<angle1) thetaPom = -thetaPom;
+
+       /* if (Math.tan(v0arg)<0){
+            thetaPom = -thetaPom;
+        }*/
+
+
+        for (Rocket roc:rockets ){
+            r = r0/(1-epsilon*Math.cos(theta-theta0-thetaPom));
+
+            x = (float) ((float) r*Math.cos(theta)) + planet.getPosition().x;
+            y = (float) ((float) r*Math.sin(theta)) + planet.getPosition().y;
+
+            roc.setPosition(x,y);
+            theta+=increment;
 
         //    System.out.println(x + " "+y);
-            index++;
         }
+
+     /*   for (Rocket roc:mockedRockets){
+            r = r0/(1-epsilon*Math.cos(thetaMock-theta0+thetaPom));
+
+            x = (float) ((float) r*Math.cos(thetaMock)) + planet.getPosition().x;
+            y = (float) ((float) r*Math.sin(thetaMock)) + planet.getPosition().y;
+
+            roc.setPosition(x,y);
+            thetaMock+=increment;
+
+            //    System.out.println(x + " "+y);
+        }*/
+        Vector2 temp = new Vector2(rocket.getPosition().x,rocket.getPosition().y);
+        temp.sub(rockets.peek().getPosition());
+        rocketDistance = temp.len();
       //  System.out.println("UDALJENOST ZEMLJE " +l/(1+e*Math.cos(Math.PI - theta0)));
        // System.out.println("DT" + dt);
 
 
     }
 
-    public Array<Rocket> getRockets() {
+    private void move(){
+        Rocket roc = rockets.pollFirst();
+        double r = r0/(1-epsilon*Math.cos(theta-theta0-thetaPom));
+        float x = (float) ((float) r*Math.cos(theta)) + planet.getPosition().x;
+        float y = (float) ((float) r*Math.sin(theta)) + planet.getPosition().y;
+
+        roc.setPosition(x,y);
+        rockets.addLast(roc);
+        theta+=increment;
+        rocketDistance = (Vector2.dst(roc.getPosition().x,roc.getPosition().y,rocket.getPosition().x,rocket.getPosition().y));
+
+    }
+    public List<Rocket> getRockets() {
         return rockets;
     }
 }
