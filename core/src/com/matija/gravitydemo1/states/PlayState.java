@@ -73,7 +73,10 @@ public class PlayState extends State {
      */
     public void handleInput() {
         if (Gdx.input.isTouched()){
-            rocket.setAcceleration(4,0);
+            if (Gdx.input.getX()<rocket.getPosition().x)
+                rocket.setAcceleration(-4,0);
+            else
+                rocket.setAcceleration(4,0);
            // System.out.println("pritisak");
             potisak = true;
         }
