@@ -80,7 +80,7 @@ public class PositionSimulator {
 
         if (r.getBounds().overlaps(rocket.getBounds())){
             this.move();
-            System.out.println("trebalo bi se pomaknuti");
+            //System.out.println("trebalo bi se pomaknuti");
             return;
         }
 
@@ -102,7 +102,7 @@ public class PositionSimulator {
     private void newTrajectory(float dt){
         position.set(rocket.getPosition().x - planet.getPosition().x,rocket.getPosition().y - planet.getPosition().y);
         velocity.set(rocket.getVelocity().x,rocket.getVelocity().y);
-        System.out.println("Brzina" + " " + velocity);
+      //  System.out.println("Brzina" + " " + velocity);
         theta0 = Math.atan2(position.y,position.x);
 
     //    System.out.println("Theta je " + + theta0);
@@ -113,7 +113,7 @@ public class PositionSimulator {
 
         positionNorm.set(position.x,position.y);
         positionNorm.setLength(1);
-        System.out.println("Pozicija NORMA  " + + positionNorm.x + " "+positionNorm.y);
+     //   System.out.println("Pozicija NORMA  " + + positionNorm.x + " "+positionNorm.y);
 
         thetaNorm.set(positionNorm.x,positionNorm.y);
         thetaNorm.rotate90(1);
@@ -140,7 +140,7 @@ public class PositionSimulator {
         double v0arg = Math.atan2(velocity.y,velocity.x);
         thetaPom = Math.acos((1-(r0/positionDistance))/epsilon);
 
-        System.out.println("r unit" + " "+ positionNorm);
+       /* System.out.println("r unit" + " "+ positionNorm);
         System.out.println("theta unit" + " "+ thetaNorm);
         System.out.println("w0" + " "+ angleVelocity);
         System.out.println("theta 0" + " "+ theta0);
@@ -148,7 +148,7 @@ public class PositionSimulator {
         System.out.println("theta pomak" + " "+ thetaPom);
         System.out.println("epsilon " + epsilon);
         System.out.println("E "+ E );
-        System.out.println("L "+ L );
+        System.out.println("L "+ L );*/
 
         increment = 0.1;
         if (angleVelocity<0) increment=-0.1;

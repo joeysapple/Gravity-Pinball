@@ -73,12 +73,14 @@ public class PlayState extends State {
      */
     public void handleInput() {
         if (Gdx.input.isTouched()){
-            if (Gdx.input.getX()<rocket.getPosition().x)
+
+            if (Gdx.input.getX()<Gdx.graphics.getWidth()/2)
                 rocket.setAcceleration(-4,0);
             else
                 rocket.setAcceleration(4,0);
            // System.out.println("pritisak");
             potisak = true;
+           // System.out.println("x koordinata dodira "+ Gdx.input.getX() + "x koordinata rakete "+ rocket.getPosition().x + Gdx.graphics.getWidth());
         }
     }
 
