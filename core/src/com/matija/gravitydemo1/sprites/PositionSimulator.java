@@ -155,17 +155,17 @@ public class PositionSimulator {
         theta = theta0+increment;
 
 
-        double r = r0/(1-epsilon*Math.cos(theta+2*increment-theta0-thetaPom));
+        double r = r0/(1-epsilon*Math.cos(theta+increment/40-theta0-thetaPom));
 
-        float x = (float) ((float) r*Math.cos(theta+2*increment)) + planet.getPosition().x;
-        float y = (float) ((float) r*Math.sin(theta+2*increment)) + planet.getPosition().y;
+        float x = (float) ((float) r*Math.cos(theta+increment/40)) + planet.getPosition().x;
+        float y = (float) ((float) r*Math.sin(theta+increment/40)) + planet.getPosition().y;
 
         double dis1 = Vector2.dst(rocket.getPosition().x,rocket.getPosition().y,x,y);
         vec1.set(x-rocket.getPosition().x,y-rocket.getPosition().y);
         double angle1 = Math.abs(Math.atan2(vec1.y,vec1.x)-Math.atan2(rocket.getVelocity().y,rocket.getVelocity().x));
-        r = r0/(1-epsilon*Math.cos(theta+2*increment-theta0+thetaPom));
-        x = (float) ((float) r*Math.cos(theta+2*increment)) + planet.getPosition().x;
-        y = (float) ((float) r*Math.sin(theta+2*increment)) + planet.getPosition().y;
+        r = r0/(1-epsilon*Math.cos(theta+increment/40-theta0+thetaPom));
+        x = (float) ((float) r*Math.cos(theta+increment/40)) + planet.getPosition().x;
+        y = (float) ((float) r*Math.sin(theta+increment/40)) + planet.getPosition().y;
 
         double dis2 = Vector2.dst(rocket.getPosition().x,rocket.getPosition().y,x,y);
         vec1.set(x-rocket.getPosition().x,y-rocket.getPosition().y);
