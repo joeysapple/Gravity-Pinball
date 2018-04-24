@@ -3,6 +3,7 @@ package com.matija.gravitydemo1.sprites;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 import com.matija.gravitydemo1.states.PlayState;
@@ -16,7 +17,7 @@ import com.matija.gravitydemo1.states.PlayState;
  * Masa rakete se nalazi u varijabli mass, a grafički model je sadržan u varijabli rockeSprite. Granice rakete modelirane
  * su varijablom bounds tipa Circle.
  */
-public class Rocket {
+public class Rocket implements Drawable,Movable{
     private Vector2 position;
     private Vector2 velocity;
     private Vector2 acceleration;
@@ -24,6 +25,7 @@ public class Rocket {
     private Sprite rocketSprite;
     private Circle bounds;
     private Vector2 oldAcc;
+    private GraphicsModel model;
 
 
     /**
@@ -45,10 +47,7 @@ public class Rocket {
         this.velocity = new Vector2(velocity.x,velocity.y);
         this.acceleration = new Vector2(acceleration.x,acceleration.y);
         this.mass = mass;
-
-        Texture texture = new Texture(Gdx.files.internal("rocket.png"));
-        texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        rocketSprite = new Sprite(texture);
+        this.model = new SpriteGraphicsModel("rocket.png");
         bounds = new com.badlogic.gdx.math.Circle(position.x,position.y,20);
 
         /**
@@ -68,17 +67,27 @@ public class Rocket {
      //   circle = new Sprite("rocket.png");
     }
 
-    /*
-    Getteri i setteri
-     */
+    @Override
+    public void draw(SpriteBatch sb) {
+        sb.draw(model.texture, position.x-20, position.y-20,40,40);
+    }
+
+    @Override
+    public void dispose(){
+        model.dispose();
+    }
+
+    @Override
     public Vector2 getPosition() {
         return position;
     }
 
+    @Override
     public Vector2 getVelocity() {
         return velocity;
     }
 
+    @Override
     public Vector2 getAcceleration() {
         return acceleration;
     }

@@ -1,6 +1,7 @@
 package com.matija.gravitydemo1.states;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -8,6 +9,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.matija.gravitydemo1.GravityDemo1;
+import com.matija.gravitydemo1.sprites.Moon;
+import com.matija.gravitydemo1.sprites.MovementSimulator;
 import com.matija.gravitydemo1.sprites.Rocket;
 import com.matija.gravitydemo1.sprites.Planet;
 import com.matija.gravitydemo1.sprites.PositionSimulator;
@@ -22,6 +25,7 @@ import com.matija.gravitydemo1.sprites.PositionSimulator;
 public class PlayState extends State {
     private Rocket rocket;
     private Planet planet;
+    private Moon moon;
 
     private Sprite backroundSprite;
     private Music music;
@@ -30,6 +34,7 @@ public class PlayState extends State {
     public final static double G = 1000.0f;
     boolean noviKvadrat = false;
     private PositionSimulator ps;
+    private MovementSimulator ms;
 
     /**
      * Konstruktor
@@ -46,7 +51,8 @@ public class PlayState extends State {
         Instanciranje rakete i planeta
          */
         rocket = new Rocket(new Vector2(GravityDemo1.WIDTH/4,50),new Vector2((float) 20,0),new Vector2(0,0),1);
-        planet = new Planet(new Vector2(GravityDemo1.WIDTH/4,250),new Vector2(0,0),new Vector2(0,0),100);
+        planet = new Planet(new Vector2(GravityDemo1.WIDTH/4,450),new Vector2(0,0),new Vector2(0,0),100);
+        moon = new Moon(new Vector2(400,400),new Vector2(-10,-17),new Vector2(0,0),1);
 
         /*
         Inicijalizacija pozadine
@@ -56,6 +62,7 @@ public class PlayState extends State {
         backroundSprite = new Sprite(backround);
 
         ps = new PositionSimulator(rocket,planet);
+        ms = new MovementSimulator();
 
         /*
         Inicijalizacija glazbe
@@ -97,12 +104,16 @@ public class PlayState extends State {
 
 
 
-        rocket.update(dt,planet);   //ažuriraju se parametri rakete
+    //    rocket.update(dt,planet);   //ažuriraju se parametri rakete
+        ms.move(rocket,planet,dt);
+        ms.move(moon,planet,dt);
 
+        rocket.getBounds().setPosition(rocket.getPosition().x,rocket.getPosition().y);
+        rocket.setAcceleration(0,0);
 
-            ps.simulate(dt,potisak);    //simulacija putanje na temelju trenutnih parametara
-            potisak = false;
-            noviKvadrat = false;
+        ps.simulate(dt,potisak);    //simulacija putanje na temelju trenutnih parametara
+        potisak = false;
+        noviKvadrat = false;
 
 
 
@@ -118,7 +129,7 @@ public class PlayState extends State {
     public void render(SpriteBatch sb) {
         sb.setProjectionMatrix(cam.combined);
         sb.begin();
-      //  cam.zoom = 5.0f;
+       // cam.zoom = 5.0f;
         backroundSprite.setCenter(cam.position.x,cam.position.y);
         backroundSprite.draw(sb); //iscrtanjanje pozadine
 
@@ -128,18 +139,20 @@ public class PlayState extends State {
                             rakete u središtu rakete, da bi se dobio donji lijevi kut, potrebno je od središta oduzeti
                             polovicu duljine i širine slike.
          */
-        sb.draw(rocket.getRocketSprite(), rocket.getPosition().x-20, rocket.getPosition().y-20,40,40);
 
+       rocket.draw(sb);
+       moon.draw(sb);
         /*
         Iscrtavanje planeta
          */
-        sb.draw(planet.getPlanetSprite(),planet.getPosition().x-planet.getRadius(), planet.getPosition().y-planet.getRadius(),150,150);
+
 
         /*
         Provjera je li došlo do sudara. Ukoliko jest, igra završava
          */
         if (planet.getBounds().overlaps(rocket.getBounds())){
            // System.out.println("preklapanje");
+            dispose();
             gsm.set(new PlayState(gsm));
         }
 
@@ -155,13 +168,15 @@ public class PlayState extends State {
            // System.out.println("hah" + r.getPosition().x + " "+r.getPosition().y);
 
         }
-
+        planet.draw(sb);
 
         sb.end();
     }
 
     @Override
     public void dispose() {
-        /*rocket.getCircle().dispose()*/;
+       rocket.dispose();
+       planet.dispose();
+       moon.dispose();
     }
 }

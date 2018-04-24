@@ -3,9 +3,12 @@ package com.matija.gravitydemo1.sprites;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.math.Circle;
 import com.matija.gravitydemo1.states.PlayState;
+
+import javax.naming.OperationNotSupportedException;
 
 /**
  * Created by Korisnik on 29.3.2018..
@@ -18,15 +21,14 @@ import com.matija.gravitydemo1.states.PlayState;
  * planeta nalazi se u varijabli planetSprite.
  *
  */
-public class Planet {
+public class Planet implements Drawable{
     private Vector2 position;
     private Vector2 velocity;
     private Vector2 acceleration;
     private double mass;
     private Circle bounds;
     private int radius;
-    private Sprite planetSprite;
-
+    private GraphicsModel model;
     /**
      * Konstruktor za planet
      * @param position Pozicija planeta
@@ -39,10 +41,9 @@ public class Planet {
         this.velocity = new Vector2(velocity.x,velocity.y);
         this.acceleration = new Vector2(acceleration.x,acceleration.y);
         this.mass = mass;
-        Texture texture = new Texture(Gdx.files.internal("jupiter.png"));
-        texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        planetSprite = new Sprite(texture);
-        radius = 75;
+       // model = new SpriteGraphicsModel("earth.gif");
+        model = new GifGraphicsModel("earth/frame1.gif",36);
+        radius = 190;
         //   circle = new Sprite("rocket.png");
         bounds = new Circle(position.x,position.y,radius);
     }
@@ -60,10 +61,6 @@ public class Planet {
 
     public Vector2 getAcceleration() {
         return acceleration;
-    }
-
-    public Sprite getPlanetSprite() {
-        return planetSprite;
     }
 
     public int getRadius() {
@@ -87,9 +84,22 @@ public class Planet {
         this.acceleration.y = y;
     }
 
-    public void setTexture(Sprite t){
-        this.planetSprite = t;
+
+    @Override
+    public void draw(SpriteBatch sb) {
+       // sb.draw(model.texture,position.x-250, position.y-250 ,500,500);
+        model.sprite.setSize(500,500);
+        model.sprite.setCenter(position.x,position.y);
+        model.sprite.draw(sb);
+        try {
+            model.changeState();
+        } catch (OperationNotSupportedException e) {
+            e.printStackTrace();
+        }
     }
 
-
+    @Override
+    public void dispose(){
+        model.dispose();
+    }
 }
