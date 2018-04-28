@@ -26,6 +26,7 @@ public class LoadingState extends State {
     private Pixmap loadingBarBackground;
     private Pixmap loadingBar;
     private Texture t;
+    private float progress;
     /**
      * Konstruktor
      *
@@ -33,7 +34,7 @@ public class LoadingState extends State {
      */
     public LoadingState(GameStateManager gsm) {
         super(gsm);
-
+        Assets.newManager();
         cam.setToOrtho(false, GravityDemo1.WIDTH/2,GravityDemo1.HEIGHT/2);
         t = new Texture(Gdx.files.internal("dot.jpg"));
         background = new Texture(Gdx.files.internal("space.jpg"));
@@ -83,7 +84,7 @@ public class LoadingState extends State {
 
     @Override
     public void update(float dt) {
-      if(Assets.manager.update()){
+      if(Assets.manager.update() && progress>=1.0f){
           this.dispose();
           gsm.set(new PlayState(gsm));
       }
@@ -91,16 +92,16 @@ public class LoadingState extends State {
 
     @Override
     public void render(SpriteBatch sb) {
-        float progress = Assets.manager.getProgress();
+        progress = Assets.manager.getProgress();
         System.out.println(progress);
 
         sb.setProjectionMatrix(cam.combined);
         sb.begin();
         backroundSprite.draw(sb);
-        sb.draw(t,50,200,100,20);
+        sb.draw(t,50,200,150,20);
         pb.setValue(progress);
         System.out.println("Procent: "+pb.getPercent());
-        pb.setBounds(50,200,100*progress,20);
+        pb.setBounds(50,200,150*progress,20);
         pb.draw(sb,1);
         sb.end();
 
