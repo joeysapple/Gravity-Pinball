@@ -3,6 +3,7 @@ package com.matija.gravitydemo1.sprites;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.matija.gravitydemo1.states.Assets;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +36,9 @@ public class GifGraphicsModel extends GraphicsModel {
         for (int i=0;i<size;i++){
             StringBuilder sb = new StringBuilder(path);
             sb.append("frame" + (i+1) + ".gif");
-            Texture t = new Texture(Gdx.files.internal(sb.toString()));
+           // Texture t = new Texture(Gdx.files.internal(sb.toString()));
+            Texture t = Assets.manager.get(sb.toString(),Texture.class);
+
             t.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
             textures.add(t);
             Sprite s = new Sprite(t);

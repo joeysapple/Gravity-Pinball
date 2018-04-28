@@ -153,7 +153,7 @@ public class PlayState extends State {
         if (planet.getBounds().overlaps(rocket.getBounds())){
            // System.out.println("preklapanje");
             dispose();
-            gsm.set(new PlayState(gsm));
+            gsm.set(new MenuState(gsm));
         }
 
         /*
@@ -178,5 +178,8 @@ public class PlayState extends State {
        rocket.dispose();
        planet.dispose();
        moon.dispose();
+       music.stop();
+       music.dispose();
+       Assets.newManager();
     }
 }

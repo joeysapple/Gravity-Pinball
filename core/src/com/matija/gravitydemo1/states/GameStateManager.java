@@ -1,6 +1,7 @@
 package com.matija.gravitydemo1.states;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.matija.gravitydemo1.GravityDemo1;
 
 import java.util.Stack;
 
@@ -15,12 +16,14 @@ import java.util.Stack;
 
 public class GameStateManager {
     private Stack<State> states;
+    public GravityDemo1 game;
 
     /**
      * Konstruktor
      */
-    public GameStateManager(){
+    public GameStateManager(GravityDemo1 game){
         states = new Stack<State>();
+        this.game=game;
     }
 
     /**
