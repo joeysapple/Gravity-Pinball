@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.matija.gravitydemo1.GravityDemo1;
@@ -27,6 +28,7 @@ public class LoadingState extends State {
     private Pixmap loadingBar;
     private Texture t;
     private float progress;
+    private com.matija.gravitydemo1.states.ProgressBar progressBar;
     /**
      * Konstruktor
      *
@@ -36,6 +38,12 @@ public class LoadingState extends State {
         super(gsm);
         Assets.newManager();
         cam.setToOrtho(false, GravityDemo1.WIDTH/2,GravityDemo1.HEIGHT/2);
+        progressBar = new com.matija.gravitydemo1.states.ProgressBar(new Vector2(50,200),150);
+
+        System.out.println("Za progress bar: ");
+        for (Integer i:progressBar.marks){
+            System.out.println(i);
+        }
         t = new Texture(Gdx.files.internal("dot.jpg"));
         background = new Texture(Gdx.files.internal("space.jpg"));
         background.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
@@ -88,6 +96,7 @@ public class LoadingState extends State {
           this.dispose();
           gsm.set(new PlayState(gsm));
       }
+
     }
 
     @Override
@@ -97,12 +106,17 @@ public class LoadingState extends State {
 
         sb.setProjectionMatrix(cam.combined);
         sb.begin();
+
         backroundSprite.draw(sb);
+        progressBar.setProgressValue(progress);
+        progressBar.draw(sb);
+        /*
         sb.draw(t,50,200,150,20);
         pb.setValue(progress);
         System.out.println("Procent: "+pb.getPercent());
         pb.setBounds(50,200,150*progress,20);
         pb.draw(sb,1);
+        */
         sb.end();
 
     }
@@ -111,6 +125,7 @@ public class LoadingState extends State {
     public void dispose() {
         background.dispose();
         t.dispose();
+        progressBar.dispose();
 
     }
 

@@ -57,7 +57,7 @@ public class PositionSimulator {
         for (double theta = 0;theta <= Math.PI/2;theta+=0.1 ){
 
             rockets.add(new Rocket(new Vector2(0,0), new Vector2(0,0), new Vector2(0,0),1));
-            Texture texture = new Texture(Gdx.files.internal("dot.jpg"));
+            Texture texture = new Texture(Gdx.files.internal("sphere.png"));
             texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
             rockets.peekLast().setTexture(new Sprite(texture));
