@@ -180,6 +180,7 @@ public class PlayState extends State {
        moon.dispose();
        music.stop();
        music.dispose();
+       ps.dispose();
        Assets.newManager();
     }
 }

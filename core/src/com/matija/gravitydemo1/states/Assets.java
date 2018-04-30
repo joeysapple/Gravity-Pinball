@@ -12,7 +12,7 @@ import java.util.List;
 
 public class Assets {
 
-    public static final String rocket = "rocket.png";
+    public static final String rocket = "rocketRight.png";
     public static final String jupiter = "jupiter.png";
     public static final List<String> earth = earthStrings();
 

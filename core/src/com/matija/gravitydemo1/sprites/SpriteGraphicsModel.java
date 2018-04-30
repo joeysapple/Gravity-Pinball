@@ -11,8 +11,6 @@ import javax.naming.OperationNotSupportedException;
 
 public class SpriteGraphicsModel extends GraphicsModel {
 
-    private Sprite sprite;
-
     public SpriteGraphicsModel(String file){
         super(file);
         filterTexture();

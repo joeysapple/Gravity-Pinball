@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
+import com.matija.gravitydemo1.states.Assets;
 import com.matija.gravitydemo1.states.PlayState;
 
 /**
@@ -47,7 +48,8 @@ public class Rocket implements Drawable,Movable{
         this.velocity = new Vector2(velocity.x,velocity.y);
         this.acceleration = new Vector2(acceleration.x,acceleration.y);
         this.mass = mass;
-        this.model = new SpriteGraphicsModel("rocket.png");
+        this.model = new SpriteGraphicsModel(Assets.rocket);
+        model.sprite.setSize(40,40);
         bounds = new com.badlogic.gdx.math.Circle(position.x,position.y,20);
 
         /**
@@ -69,7 +71,12 @@ public class Rocket implements Drawable,Movable{
 
     @Override
     public void draw(SpriteBatch sb) {
-        sb.draw(model.texture, position.x-20, position.y-20,40,40);
+     //   sb.draw(model.texture, position.x-20, position.y-20,40,40);
+        model.sprite.setCenter(position.x,position.y);
+        model.sprite.setOriginCenter();
+        model.sprite.setRotation((float) ( Math.atan2(velocity.y,velocity.x)/Math.PI*180));
+        model.sprite.draw(sb);
+
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.matija.gravitydemo1.sprites;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.matija.gravitydemo1.states.PlayState;
@@ -36,6 +37,8 @@ public class PositionSimulator {
     private double r0;
     private double increment;
     private Vector2 vec1;
+    private double angle;
+    private Texture texture;
     /**
      * Konstruktor
      * @param rocket Raketa za koju se vrši predikcija putanje
@@ -44,7 +47,6 @@ public class PositionSimulator {
     public PositionSimulator(Rocket rocket, Planet planet){
         this.rocket = rocket;
         rockets = new LinkedList<Rocket>();
-     //   mockedRockets = new LinkedList<Rocket>();
         position = new Vector2();
         velocity = new Vector2();
         positionNorm = new Vector2();
@@ -52,23 +54,18 @@ public class PositionSimulator {
         planetMass = planet.getMass();
         rocketMass = rocket.getMass();
         vec1 = new Vector2();
+        angle=0;
         this.planet = planet;
 
         for (double theta = 0;theta <= Math.PI/2;theta+=0.1 ){
 
             rockets.add(new Rocket(new Vector2(0,0), new Vector2(0,0), new Vector2(0,0),1));
-            Texture texture = new Texture(Gdx.files.internal("sphere.png"));
+            texture = new Texture(Gdx.files.internal("sphere.png"));
             texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
             rockets.peekLast().setTexture(new Sprite(texture));
             rockets.peekLast().setBounds(new com.badlogic.gdx.math.Circle(0,0,2 ));
 
-        /*    mockedRockets.add(new Rocket(new Vector2(0,0), new Vector2(0,0), new Vector2(0,0),1));
-            Texture texture1 = new Texture(Gdx.files.internal("dotM.jpg"));
-            texture1.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-
-            mockedRockets.peekLast().setTexture(new Sprite(texture1));
-            mockedRockets.peekLast().setBounds(new com.badlogic.gdx.math.Circle(0,0,2 ));*/
         }
     }
 
@@ -76,6 +73,8 @@ public class PositionSimulator {
     public void simulate(float dt, boolean simulate){
         Rocket r = rockets.get(0);
         double newRocketDistance = (Vector2.dst(r.getPosition().x,r.getPosition().y,rocket.getPosition().x,rocket.getPosition().y));
+        double newAngle = Math.abs(Math.atan2(r.getPosition().y-rocket.getPosition().y,r.getPosition().x-rocket.getPosition().x)
+                -Math.atan2(rocket.getVelocity().y,rocket.getVelocity().x));
 
 
         if (r.getBounds().overlaps(rocket.getBounds())){
@@ -84,7 +83,8 @@ public class PositionSimulator {
             return;
         }
 
-        if (newRocketDistance>rocketDistance){
+        System.out.println("kut " + angle + " "+ newAngle);
+        if (newRocketDistance>rocketDistance || newAngle>angle){
             newTrajectory(dt);
             return;
         }
@@ -203,6 +203,9 @@ public class PositionSimulator {
         Vector2 temp = new Vector2(rocket.getPosition().x,rocket.getPosition().y);
         temp.sub(rockets.peek().getPosition());
         rocketDistance = temp.len();
+        angle = Math.abs(Math.atan2(rockets.peekFirst().getPosition().y-rocket.getPosition().y,rockets.peekFirst().getPosition().x-rocket.getPosition().x)
+                -Math.atan2(rocket.getVelocity().y,rocket.getVelocity().x));
+
       //  System.out.println("UDALJENOST ZEMLJE " +l/(1+e*Math.cos(Math.PI - theta0)));
        // System.out.println("DT" + dt);
 
@@ -218,10 +221,17 @@ public class PositionSimulator {
         roc.setPosition(x,y);
         rockets.addLast(roc);
         theta+=increment;
-        rocketDistance = (Vector2.dst(roc.getPosition().x,roc.getPosition().y,rocket.getPosition().x,rocket.getPosition().y));
-
+        rocketDistance = (Vector2.dst(rockets.peekFirst().getPosition().x,rockets.peekFirst().getPosition().y,rocket.getPosition().x,rocket.getPosition().y));
+        angle = Math.abs(Math.atan2(rockets.peekFirst().getPosition().y-rocket.getPosition().y,rockets.peekFirst().getPosition().x-rocket.getPosition().x)
+                -Math.atan2(rocket.getVelocity().y,rocket.getVelocity().x));
     }
     public List<Rocket> getRockets() {
         return rockets;
     }
+
+    public void dispose(){
+        texture.dispose();
+    }
+
+
 }
