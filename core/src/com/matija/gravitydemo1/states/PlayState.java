@@ -19,6 +19,7 @@ import com.matija.gravitydemo1.sprites.PositionSimulator1;
 import com.matija.gravitydemo1.sprites.Rocket;
 import com.matija.gravitydemo1.sprites.Planet;
 import com.matija.gravitydemo1.sprites.PositionSimulator;
+import com.matija.gravitydemo1.sprites.ControlBoard;
 
 /**
  * Created by Korisnik on 23.3.2018..
@@ -41,6 +42,8 @@ public class PlayState extends State {
    // private PositionSimulator ps;
     private MovementSimulator ms;
     private PositionSimulator1 ps;
+
+    private ControlBoard controlBoard;
     /**
      * Konstruktor
      * @param gsm gsm
@@ -81,6 +84,15 @@ public class PlayState extends State {
         music.setLooping(true);
         music.setVolume(0.90f);
         music.play();
+
+        /*
+        Inicijalizacija kontrolne ploce
+         */
+
+        /*
+        controlBoard = new ControlBoard(rocket, new SpriteBatch());
+        controlBoard.create();
+        */
     }
 
 
@@ -89,6 +101,8 @@ public class PlayState extends State {
      * Metoda za upravljanje inputom. Ukoliko korisnik dotakne ekran, raketi se dodaje akceleracija udesno
      */
     public void handleInput() {
+        //Stari input, novi je u klasi ControlBoard
+
         if (Gdx.input.isTouched()){
 
             if (Gdx.input.getX()<Gdx.graphics.getWidth()/2)
@@ -99,6 +113,7 @@ public class PlayState extends State {
             potisak = true;
            // System.out.println("x koordinata dodira "+ Gdx.input.getX() + "x koordinata rakete "+ rocket.getPosition().x + Gdx.graphics.getWidth());
         }
+
     }
 
     /**
@@ -168,7 +183,7 @@ public class PlayState extends State {
         if (planet.getBounds().overlaps(rocket.getBounds())){
            // System.out.println("preklapanje");
             dispose();
-            gsm.set(new MenuState(gsm));
+            gsm.set(new GameOverState(gsm));
         }
 
         /*
@@ -189,6 +204,13 @@ public class PlayState extends State {
 
         }
 
+        /*
+        Iscrtavanje kontrolne ploce --Marin
+         */
+
+        /*
+        controlBoard.render();
+        */
         sb.end();
     }
 

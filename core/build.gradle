@@ -9,3 +9,8 @@ sourceSets.main.java.srcDirs = [ "src/" ]
 eclipse.project {
     name = appName + "-core"
 }
+
+dependencies {
+    compile files('lib/gdx-freetype.jar')
+    compile files('lib/gdx-freetype-natives.jar')
+}
