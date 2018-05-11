@@ -55,9 +55,6 @@ public class GifGraphicsModel extends GraphicsModel {
     public void changeState() throws OperationNotSupportedException {
         double currentM = System.currentTimeMillis();
         counter+=(currentM - currentMil);
-        System.out.println("tren " + currentM);
-        System.out.println("pros " + currentMil);
-        System.out.println("proteklo vrijeme " + (currentM - currentMil));
         currentMil = currentM;
 
         if (counter>75){

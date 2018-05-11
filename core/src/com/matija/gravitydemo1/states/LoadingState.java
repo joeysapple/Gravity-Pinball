@@ -40,10 +40,6 @@ public class LoadingState extends State {
         cam.setToOrtho(false, GravityDemo1.WIDTH/2,GravityDemo1.HEIGHT/2);
         progressBar = new com.matija.gravitydemo1.states.ProgressBar(new Vector2(50,200),150);
 
-        System.out.println("Za progress bar: ");
-        for (Integer i:progressBar.marks){
-            System.out.println(i);
-        }
         t = new Texture(Gdx.files.internal("dot.jpg"));
         background = new Texture(Gdx.files.internal("space.jpg"));
         background.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
@@ -102,7 +98,7 @@ public class LoadingState extends State {
     @Override
     public void render(SpriteBatch sb) {
         progress = Assets.manager.getProgress();
-        System.out.println(progress);
+     //   System.out.println(progress);
 
         sb.setProjectionMatrix(cam.combined);
         sb.begin();
@@ -132,6 +128,7 @@ public class LoadingState extends State {
     private void load(){
         Assets.manager.load(Assets.rocket,Texture.class);
         Assets.manager.load(Assets.jupiter,Texture.class);
+        Assets.manager.load("sphere.png",Texture.class);
 
         for (int i=0;i<36;i++){
             Assets.manager.load(Assets.earth.get(i),Texture.class);

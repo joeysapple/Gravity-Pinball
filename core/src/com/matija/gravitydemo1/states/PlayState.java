@@ -6,11 +6,16 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.math.Polygon;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.matija.gravitydemo1.GravityDemo1;
 import com.matija.gravitydemo1.sprites.Moon;
 import com.matija.gravitydemo1.sprites.MovementSimulator;
+import com.matija.gravitydemo1.sprites.Point;
+import com.matija.gravitydemo1.sprites.PositionSimulator1;
 import com.matija.gravitydemo1.sprites.Rocket;
 import com.matija.gravitydemo1.sprites.Planet;
 import com.matija.gravitydemo1.sprites.PositionSimulator;
@@ -33,9 +38,9 @@ public class PlayState extends State {
     public final static Vector2 otherCirclePos = new Vector2(GravityDemo1.WIDTH/4,250);
     public final static double G = 1000.0f;
     boolean noviKvadrat = false;
-    private PositionSimulator ps;
+   // private PositionSimulator ps;
     private MovementSimulator ms;
-
+    private PositionSimulator1 ps;
     /**
      * Konstruktor
      * @param gsm gsm
@@ -61,7 +66,12 @@ public class PlayState extends State {
         backround.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         backroundSprite = new Sprite(backround);
 
-        ps = new PositionSimulator(rocket,planet);
+     //   ps = new PositionSimulator(rocket,planet);
+        ps = new PositionSimulator1();
+
+        ps.setPlanet(planet);
+        ps.setRocket(rocket);
+
         ms = new MovementSimulator();
 
         /*
@@ -109,14 +119,16 @@ public class PlayState extends State {
         ms.move(moon,planet,dt);
 
         rocket.getBounds().setPosition(rocket.getPosition().x,rocket.getPosition().y);
+        ps.simulate(dt);
         rocket.setAcceleration(0,0);
 
-        ps.simulate(dt,potisak);    //simulacija putanje na temelju trenutnih parametara
+            //simulacija putanje na temelju trenutnih parametara
         potisak = false;
         noviKvadrat = false;
-
-
-
+        int j=0;
+        for (int i=0;i<10000;i++){
+            j++;
+        }
 
         cam.position.x = cam.position.x + (rocket.getPosition().x - x);
         cam.position.y = cam.position.y + (rocket.getPosition().y - y); //pomicanje kamere
@@ -129,7 +141,10 @@ public class PlayState extends State {
     public void render(SpriteBatch sb) {
         sb.setProjectionMatrix(cam.combined);
         sb.begin();
-       // cam.zoom = 5.0f;
+
+
+
+      //  cam.zoom = 2.0f;
         backroundSprite.setCenter(cam.position.x,cam.position.y);
         backroundSprite.draw(sb); //iscrtanjanje pozadine
 
@@ -145,7 +160,7 @@ public class PlayState extends State {
         /*
         Iscrtavanje planeta
          */
-
+        planet.draw(sb);
 
         /*
         Provjera je li došlo do sudara. Ukoliko jest, igra završava
@@ -159,16 +174,20 @@ public class PlayState extends State {
         /*
         Iscrtavanje putanje
          */
+
         if (ps.getRockets().get(0).getBounds().overlaps(rocket.getBounds())){
-          //  noviKvadrat = true;
+            //  noviKvadrat = true;
         }
-        for (Rocket r:ps.getRockets()){
-            sb.draw(r.getRocketSprite(),r.getPosition().x-2, r.getPosition().y-2,5,5);
+        int index=0;
+
+        for (index=0;index<=ps.getIndex();index++){
+            Point r = ps.getRockets().get(index);
+            r.draw(sb);
+
             if (planet.getBounds().overlaps(r.getBounds())) break;
-           // System.out.println("hah" + r.getPosition().x + " "+r.getPosition().y);
+            // System.out.println("hah" + r.getPosition().x + " "+r.getPosition().y);
 
         }
-        planet.draw(sb);
 
         sb.end();
     }

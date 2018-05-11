@@ -19,6 +19,8 @@ import java.util.List;
  * Klasa koja služi da bi se predvidjela putanja rakete na temelju trenutnih parametara
  */
 public class PositionSimulator {
+    private static final int markDistance = 20;
+
     private Rocket rocket;
     private Planet planet;
     LinkedList<Rocket> rockets;
@@ -83,7 +85,7 @@ public class PositionSimulator {
             return;
         }
 
-        System.out.println("kut " + angle + " "+ newAngle);
+      //  System.out.println("kut " + angle + " "+ newAngle);
         if (newRocketDistance>rocketDistance || newAngle>angle){
             newTrajectory(dt);
             return;
@@ -152,20 +154,22 @@ public class PositionSimulator {
 
         increment = 0.1;
         if (angleVelocity<0) increment=-0.1;
-        theta = theta0+increment;
 
 
-        double r = r0/(1-epsilon*Math.cos(theta+increment/40-theta0-thetaPom));
+        theta = theta0;
 
-        float x = (float) ((float) r*Math.cos(theta+increment/40)) + planet.getPosition().x;
-        float y = (float) ((float) r*Math.sin(theta+increment/40)) + planet.getPosition().y;
+
+        double r = r0/(1-epsilon*Math.cos(theta+increment/40000-theta0-thetaPom));
+
+        float x = (float) ((float) r*Math.cos(theta+increment/40000)) + planet.getPosition().x;
+        float y = (float) ((float) r*Math.sin(theta+increment/40000)) + planet.getPosition().y;
 
         double dis1 = Vector2.dst(rocket.getPosition().x,rocket.getPosition().y,x,y);
         vec1.set(x-rocket.getPosition().x,y-rocket.getPosition().y);
         double angle1 = Math.abs(Math.atan2(vec1.y,vec1.x)-Math.atan2(rocket.getVelocity().y,rocket.getVelocity().x));
-        r = r0/(1-epsilon*Math.cos(theta+increment/40-theta0+thetaPom));
-        x = (float) ((float) r*Math.cos(theta+increment/40)) + planet.getPosition().x;
-        y = (float) ((float) r*Math.sin(theta+increment/40)) + planet.getPosition().y;
+        r = r0/(1-epsilon*Math.cos(theta+increment/40000-theta0+thetaPom));
+        x = (float) ((float) r*Math.cos(theta+increment/40000)) + planet.getPosition().x;
+        y = (float) ((float) r*Math.sin(theta+increment/40000)) + planet.getPosition().y;
 
         double dis2 = Vector2.dst(rocket.getPosition().x,rocket.getPosition().y,x,y);
         vec1.set(x-rocket.getPosition().x,y-rocket.getPosition().y);
@@ -177,14 +181,18 @@ public class PositionSimulator {
         }*/
 
 
+       int incrementNormal = increment>0?1:-1;
+
         for (Rocket roc:rockets ){
             r = r0/(1-epsilon*Math.cos(theta-theta0-thetaPom));
 
             x = (float) ((float) r*Math.cos(theta)) + planet.getPosition().x;
             y = (float) ((float) r*Math.sin(theta)) + planet.getPosition().y;
 
+            double phi = Math.acos(1-markDistance*markDistance/(2*r*r));
+
             roc.setPosition(x,y);
-            theta+=increment;
+            theta+=phi*incrementNormal;
 
         //    System.out.println(x + " "+y);
         }
