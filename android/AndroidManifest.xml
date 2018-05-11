@@ -13,6 +13,7 @@
             android:name="com.matija.gravitydemo1.AndroidLauncher"
             android:label="@string/app_name" 
             android:screenOrientation="portrait"
+            android:keepScreenOn="true"
             android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

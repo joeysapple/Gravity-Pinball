@@ -2,9 +2,11 @@ package com.matija.gravitydemo1;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.matija.gravitydemo1.states.Assets;
 import com.matija.gravitydemo1.states.GameStateManager;
 import com.matija.gravitydemo1.states.MenuState;
 
@@ -16,16 +18,22 @@ public class GravityDemo1 extends ApplicationAdapter {
 	public static final String TITLE = "Gravity";
 	private GameStateManager gsm;
 	private SpriteBatch batch;
-
+	public AssetManager assets;
 	Texture img;
 	
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
 		img = new Texture("badlogic.jpg");
-		gsm = new GameStateManager();
+		gsm = new GameStateManager(this);
+		assets = new AssetManager();
 		Gdx.gl.glClearColor(1, 0, 0, 1);
+
+		for (String s: Assets.earth){
+			System.out.println(s);
+		}
 		gsm.push(new MenuState(gsm));
+
 	}
 
 	@Override
