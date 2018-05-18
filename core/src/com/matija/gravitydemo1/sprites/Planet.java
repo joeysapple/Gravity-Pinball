@@ -43,7 +43,7 @@ public class Planet implements Drawable{
         this.mass = mass;
        // model = new SpriteGraphicsModel("earth.gif");
         model = new GifGraphicsModel("earth/frame1.gif",36);
-        radius = 190;
+        radius = 60;
         //   circle = new Sprite("rocket.png");
         bounds = new Circle(position.x,position.y,radius);
     }
@@ -88,7 +88,7 @@ public class Planet implements Drawable{
     @Override
     public void draw(SpriteBatch sb) {
        // sb.draw(model.texture,position.x-250, position.y-250 ,500,500);
-        model.sprite.setSize(500,500);
+        model.sprite.setSize(200,200);
         model.sprite.setCenter(position.x,position.y);
         model.sprite.draw(sb);
         try {
