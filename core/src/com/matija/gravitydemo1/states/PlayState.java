@@ -36,6 +36,7 @@ public class PlayState extends State {
     private Planet planet;
     private Moon moon;
 
+
     private Sprite backroundSprite;
     private Music music;
     public boolean potisak = true;
@@ -110,18 +111,19 @@ public class PlayState extends State {
      */
     public void handleInput() {
         //Stari input, novi je u klasi ControlBoard
-        /*
-        if (Gdx.input.isTouched()){
 
-            if (Gdx.input.getX()<Gdx.graphics.getWidth()/2)
-                rocket.setAcceleration(-4,0);
-            else
-                rocket.setAcceleration(4,0);
+        //if (Gdx.input.isTouched()){
+
+           // if (Gdx.input.getX()<Gdx.graphics.getWidth()/2)
+         //       rocket.setAcceleration(-4,0);
+          //          rocket.setScore(rocket.getScore()+10);
+
+            //    rocket.setAcceleration(4,0);
            // System.out.println("pritisak");
-            potisak = true;
+            //potisak = true;
            // System.out.println("x koordinata dodira "+ Gdx.input.getX() + "x koordinata rakete "+ rocket.getPosition().x + Gdx.graphics.getWidth());
-        }
-        */
+      //  }
+
     }
 
     /**
@@ -193,7 +195,8 @@ public class PlayState extends State {
         if (planet.getBounds().overlaps(rocket.getBounds())){
            // System.out.println("preklapanje");
             dispose();
-            gsm.set(new GameOverState(gsm));
+
+            gsm.set(new GameOverState(gsm, rocket));
         }
 
         /*

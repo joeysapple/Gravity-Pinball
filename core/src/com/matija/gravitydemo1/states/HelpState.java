@@ -2,8 +2,11 @@ package com.matija.gravitydemo1.states;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -20,8 +23,15 @@ public class HelpState extends State{
     private Texture backBtn;
     private Texture title;
     private Rectangle boundBack;
-    private TextButton helpText;
+    private String helpText;
     private Skin skin;
+
+    private BitmapFont font;
+
+    private FreeTypeFontGenerator fontGen = new FreeTypeFontGenerator(Gdx.files.internal("Comic_sans.ttf"));
+    FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+
+
     Preferences pref = Gdx.app.getPreferences("Highscore");
     public HelpState(GameStateManager gsm) {
         super(gsm);
@@ -32,8 +42,14 @@ public class HelpState extends State{
         backBtn = new Texture("button_back.png");
         boundBack=new Rectangle(cam.position.x - backBtn.getWidth() / 2, cam.position.y*0.75f,backBtn.getWidth(),backBtn.getHeight());
         //skin = new Skin();
-        //helpText = new TextButton("This is the help text", skin);
-        if( pref.getString("1", "No data").equals("No data")){
+        parameter.size=30;
+        parameter.color= Color.WHITE;
+        parameter.borderColor= Color.BLUE;
+        parameter.borderWidth = 1;
+        font = fontGen.generateFont(parameter);
+        fontGen.dispose();
+        helpText = "This is the help text";
+        /*if( pref.getString("1", "No data").equals("No data")){
             pref.putString("1", "a:10");
         }
         else{
@@ -43,11 +59,11 @@ public class HelpState extends State{
             }
             int val = Integer.parseInt(score.split(":")[1]);
             String name = pref.getString("1").split(":")[0];
-            val += 10;
+            //val += 10;
             pref.putString("1", name+":"+Integer.toString(val) );
         }
         pref.flush();
-
+*/
 
     }
 
@@ -79,7 +95,7 @@ public class HelpState extends State{
         sb.draw(background, 0,0, Menus.WIDTH/2, Menus.HEIGHT /2);
         sb.draw(title, cam.position.x +7 - title.getWidth() / 2, cam.position.y*2f - title.getHeight()*1.1f);
         sb.draw(backBtn, cam.position.x - backBtn.getWidth()/2, cam.position.y*0.75f);
-        //helpText.draw(sb, 0);
+        font.draw(sb, helpText, 5, 300);
         sb.end();
     }
 

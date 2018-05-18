@@ -238,6 +238,8 @@ public class ControlBoard implements ApplicationListener{
 
         brzinaIznosB.setText(String.format("%3.2f",iznosBrzine));
 
+        bodoviIznosB.setText(String.format("%4d", rocket.getScore()));
+
     }
 
     @Override

@@ -35,7 +35,7 @@ public class GravityDemo1 extends ApplicationAdapter {
 			System.out.println(s);
 		}
 		//TODO promjenit nazad u menu state
-		gsm.push(new LoadingState(gsm));
+		gsm.push(new MenuState(gsm));
 
 	}
 

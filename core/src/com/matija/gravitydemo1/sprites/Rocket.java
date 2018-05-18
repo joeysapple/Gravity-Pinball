@@ -23,12 +23,13 @@ public class Rocket implements Drawable,Movable{
     private Vector2 velocity;
     private Vector2 acceleration;
     private double mass;
+
     private Sprite rocketSprite;
     private Circle bounds;
     private Vector2 oldAcc;
     private GraphicsModel model;
 
-
+    private int score;
     /**
      * Pretpostavljeni konstruktor
      */
@@ -67,6 +68,9 @@ public class Rocket implements Drawable,Movable{
         oldAcc = new Vector2(posDiff.x,posDiff.y);
       //  System.out.println("u stvaranju acc" + " "+ posDiff);
      //   circle = new Sprite("rocket.png");
+
+        //postavljanje skora
+        score = 0;
     }
 
     @Override
@@ -177,5 +181,12 @@ public class Rocket implements Drawable,Movable{
 
     }
 
+    public void setScore(int score){
+        this.score = score;
+    }
+
+    public int getScore(){
+        return score;
+    }
 
 }

@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.matija.gravitydemo1.sprites.Rocket;
 import com.matija.gravitydemo1.states.Menus;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Rectangle;
@@ -48,7 +49,7 @@ public class GameOverState extends State{
     private Rectangle boundDown3;
 
 
-    public GameOverState(GameStateManager gsm) {
+    public GameOverState(GameStateManager gsm, Rocket rocket) {
         super(gsm);
         cam.setToOrtho(false, Menus.WIDTH/2, Menus.HEIGHT /2);
         background = new Texture("background.png");
@@ -75,7 +76,7 @@ public class GameOverState extends State{
         j = 0;
         k = 0;
         //dohvati score
-        score = 20;
+        score = rocket.getScore();
 
         if (pref.getString("5").equals("") && score > 0 || score > Integer.parseInt(pref.getString("5", "aaa:0").split(":")[1])){
             highscore = true;
@@ -117,7 +118,8 @@ public class GameOverState extends State{
             else {
                 if (boundSave.contains(tmp.x, tmp.y)) {
                     String nick = Character.toString(signs[i]) + Character.toString(signs[j]) + Character.toString(signs[k]) + ":" + Integer.toString(score);
-
+                    pref.putString("6", nick+Integer.toString(score));
+                    pref.flush();
                     /*System.out.println("i: " + i + " j: " + j + " k: " + k);
                     System.out.println(signs[i]);
 
