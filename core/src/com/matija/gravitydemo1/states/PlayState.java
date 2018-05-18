@@ -216,6 +216,8 @@ public class PlayState extends State {
 
 
 
+
+
         //Inace ne iscrta putanju, nema nikakvog smisla
 
         debug.draw(sb, 0);

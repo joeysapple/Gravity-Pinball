@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -61,6 +62,7 @@ public class ControlBoard implements ApplicationListener{
     private Skin touchpadSkin;
     private Drawable touchBackground;
     private Drawable touchKnob;
+/*
 
     private Label brzina;
     private Label brzinaIznos;
@@ -68,6 +70,18 @@ public class ControlBoard implements ApplicationListener{
     private Label akceleracijaIznos;
     private Label bodovi;
     private Label bodoviIznos;
+
+*/
+
+    private FreeTypeFontGenerator fontGen = new FreeTypeFontGenerator(Gdx.files.internal("Comic_sans.ttf"));
+    FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+
+    private Text brzinaB;
+    private Text brzinaIznosB;
+    private Text akceleracijaB;
+    private Text akceleracijaIznosB;
+    private Text bodoviB;
+    private Text bodoviIznosB;
 
     @Override
     public void create() {
@@ -100,8 +114,9 @@ public class ControlBoard implements ApplicationListener{
         touchpad = new Touchpad(0, touchpadStyle);
         touchpad.setBounds(15, 15, 200, 200);
 
-        //Labele
-        BitmapFont font = new BitmapFont();
+        //Labele FONTOVI
+        //BitmapFont font = new BitmapFont();
+/*
 
         Label.LabelStyle ls = new Label.LabelStyle(new BitmapFont(), Color.LIGHT_GRAY);
         brzina = new Label("Speed", ls);
@@ -111,6 +126,20 @@ public class ControlBoard implements ApplicationListener{
 
         bodovi = new Label("Score", ls);
         bodoviIznos = new Label("0", ls);
+*/
+
+
+        parameter.size=15;
+        parameter.color= Color.WHITE;
+        parameter.borderColor= Color.BLACK;
+        parameter.borderWidth = 1;
+
+        brzinaB = new Text("Speed" , fontGen, parameter, 10, 60);
+        brzinaIznosB = new Text( "00.00", fontGen,parameter, 15, 40);
+        akceleracijaB = new Text("Boost", fontGen, parameter, 170, 60);
+        akceleracijaIznosB = new Text("00.00", fontGen, parameter, 175, 40);
+        bodoviB = new Text("Score: ", fontGen, parameter, 5, 395);
+        bodoviIznosB = new Text("0", fontGen, parameter, 10, 375);
 
 
         //Viewport
@@ -130,9 +159,9 @@ public class ControlBoard implements ApplicationListener{
 
         gornja.top();
         gornja.right();
-        gornja.add(bodovi);
+        gornja.add(bodoviB);
         gornja.row();
-        gornja.add(bodoviIznos);
+        gornja.add(bodoviIznosB);
         gornja.setWidth(230);
         gornja.setHeight(400);
 
@@ -142,15 +171,15 @@ public class ControlBoard implements ApplicationListener{
         table.add(desna).expandX();
 
         lijeva.bottom();
-        lijeva.add(brzina).expandX();
+        lijeva.add(brzinaB).expandX();
         lijeva.row();
-        lijeva.add(brzinaIznos).expandX();
+        lijeva.add(brzinaIznosB).expandX();
 
         desna.bottom();
         desna.right();
-        desna.add(akceleracija).expandX();
+        desna.add(akceleracijaB).expandX();
         desna.row();
-        desna.add(akceleracijaIznos).expandX();
+        desna.add(akceleracijaIznosB).expandX();
 
         sredina.center();
         sredina.add(touchpad);
@@ -160,6 +189,8 @@ public class ControlBoard implements ApplicationListener{
         //table.add(bodovi);
         //table.row();
         //table.add(bodoviIznos);
+
+
 
                 //Dodavanje touchpada u stage, postavljanje input processora;
         stage.addActor(gornja);
@@ -198,14 +229,15 @@ public class ControlBoard implements ApplicationListener{
                 Math.pow(rocket.getAcceleration().y, 2));
         iznosAkceleracije = (double)Math.round(iznosAkceleracije * 100d)/100d;
 
-        akceleracijaIznos.setText(String.valueOf(iznosAkceleracije));
+        akceleracijaIznosB.setText(String.valueOf(iznosAkceleracije));
 
         double iznosBrzine = Math.sqrt(
                 Math.pow(rocket.getVelocity().x, 2) +
                         Math.pow(rocket.getVelocity().y, 2));
         iznosBrzine = (double)Math.round(iznosBrzine * 100d)/100d;
 
-        brzinaIznos.setText(String.valueOf(iznosBrzine));
+        brzinaIznosB.setText(String.format("%3.2f",iznosBrzine));
+
     }
 
     @Override
@@ -217,9 +249,11 @@ public class ControlBoard implements ApplicationListener{
     public void render() {
 
 
+
         batch.setProjectionMatrix(stage.getCamera().combined);
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
+
 
 
     }
