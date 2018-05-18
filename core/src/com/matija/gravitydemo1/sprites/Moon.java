@@ -28,6 +28,7 @@ public class Moon implements Drawable,Movable {
         model = new SpriteGraphicsModel("jupiter.png");
 
 
+
     }
     @Override
     public Vector2 getPosition() {

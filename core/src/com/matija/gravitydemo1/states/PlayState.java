@@ -1,16 +1,11 @@
 package com.matija.gravitydemo1.states;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Intersector;
-import com.badlogic.gdx.math.Polygon;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.matija.gravitydemo1.GravityDemo1;
 import com.matija.gravitydemo1.sprites.Moon;
 import com.matija.gravitydemo1.sprites.MovementSimulator;
@@ -18,7 +13,6 @@ import com.matija.gravitydemo1.sprites.Point;
 import com.matija.gravitydemo1.sprites.PositionSimulator1;
 import com.matija.gravitydemo1.sprites.Rocket;
 import com.matija.gravitydemo1.sprites.Planet;
-import com.matija.gravitydemo1.sprites.PositionSimulator;
 import com.matija.gravitydemo1.sprites.ControlBoard;
 
 /**
@@ -32,6 +26,12 @@ public class PlayState extends State {
     private Rocket rocket;
     private Planet planet;
     private Moon moon;
+    // za beskonacnu verziju: private boolean ascOrDesc;    //true znaci asc, false znaci desc
+    // za beskonacnu verziju: private boolean zen;      //true znaci beskonacna verzija, false znaci verzija s krajem
+    private int brojacPlaneta;
+    private int coordx;
+    private boolean planetCreationInProgress;
+    private int pom;
 
     private Sprite backroundSprite;
     private Music music;
@@ -59,8 +59,12 @@ public class PlayState extends State {
         Instanciranje rakete i planeta
          */
         rocket = new Rocket(new Vector2(GravityDemo1.WIDTH/4,50),new Vector2((float) 20,0),new Vector2(0,0),1);
-        planet = new Planet(new Vector2(GravityDemo1.WIDTH/4,450),new Vector2(0,0),new Vector2(0,0),100);
+        planet = new Planet(new Vector2(GravityDemo1.WIDTH/4,250),new Vector2(0,0),new Vector2(0,0),100,170);
         moon = new Moon(new Vector2(400,400),new Vector2(-10,-17),new Vector2(0,0),1);
+        //za beskonacnu verziju: boolean ascOrDesc = true;
+        brojacPlaneta = 1;
+        coordx = 2;
+        planetCreationInProgress = false;
 
         /*
         Inicijalizacija pozadine
@@ -130,8 +134,8 @@ public class PlayState extends State {
 
 
     //    rocket.update(dt,planet);   //ažuriraju se parametri rakete
-        ms.move(rocket,planet,dt);
-        ms.move(moon,planet,dt);
+        ms.move(rocket, planet,dt);
+        ms.move(moon, planet,dt);
 
         rocket.getBounds().setPosition(rocket.getPosition().x,rocket.getPosition().y);
         ps.simulate(dt);
@@ -184,6 +188,100 @@ public class PlayState extends State {
            // System.out.println("preklapanje");
             dispose();
             gsm.set(new GameOverState(gsm));
+        }
+
+
+
+        //printanje samo svaki deseti put
+        if (pom==10) {
+            float posTX = planet.getPosition().x;
+            float posTY = planet.getPosition().y;
+            System.out.print(posTX);
+            System.out.print(", ");
+            System.out.println(posTY);
+            float posRX = rocket.getPosition().x;
+            float posRY = rocket.getPosition().y;
+            System.out.print(posRX);
+            System.out.print(", ");
+            System.out.println(posRY);
+            pom = 0;
+        } else {
+            pom++;
+        }
+
+        /*Provjera je li planet "ispod" rakete*/
+        /*float deltaY = rocket.getPosition().y - planet.getPosition().y;
+        float deltaX = rocket.getPosition().x - planet.getPosition().x;
+        double distance =Math.sqrt(deltaY*deltaY + deltaX*deltaX);
+        if (distance > planet.getRadius()*2) {*/
+        if (rocket.getPosition().y > planet.getPosition().y+ planet.getRadius()*1.2) {
+
+
+            System.out.println("TU STVARAMO NOVI PLANET");
+
+
+            if (planetCreationInProgress) {}
+            else {
+                planetCreationInProgress = true;
+                //ako beskonacna verzija:
+                /*if (ascOrDesc) {
+                    brojacPlaneta++;
+                    if (brojacPlaneta==10) {ascOrDesc = false;}
+                } else {
+                    brojacPlaneta--;
+                    if (brojacPlaneta==1) {ascOrDesc = true;}
+                }*/
+                //ako verzija s krajem:
+                brojacPlaneta++;
+                if (brojacPlaneta == 10) {
+                    /*if (zen) { brojacPlaneta = 0;}    //ako zen verzija, brojac se samo resetira
+                        else { WORMHOLE } (zasad placeholder zaustavi igru)
+                    */
+                    dispose();
+                    gsm.set(new GameOverState(gsm));
+                }
+
+                int rad = 60 + brojacPlaneta * 10;
+                /*planetT = new Planet(new Vector2(GravityDemo1.WIDTH/4,450),new Vector2(0,0),new Vector2(0,0),100,170);
+                moonT = new Moon(new Vector2(400,400),new Vector2(-10,-17),new Vector2(0,0),1);*/
+                //planet.dispose();
+                //moon.dispose();
+                //planet = new Planet(new Vector2(GravityDemo1.WIDTH * coordx / 4, rocket.getPosition().y + 150), new Vector2(0, 0), new Vector2(0, 0), rad, rad);
+                //ps.setPlanet(planet);
+
+                planet.setPosition(new Vector2(GravityDemo1.WIDTH * coordx / 4, rocket.getPosition().y + 150));
+                planet.setRadius(rad);
+                planet.setBounds();
+                planet.setMass(rad);
+
+                ps.setInitialized(false);
+
+                System.out.println("brojacPlaneta: "+brojacPlaneta);
+                System.out.println("coordx: "+coordx);
+                switch (coordx) {
+                    case 1: coordx = 2; break;
+                    case 2: {
+                        if ( brojacPlaneta==3 || brojacPlaneta==7) {
+                            coordx = 3;
+                        } else {
+                            coordx = 1;
+                        }
+                        break;
+                    }
+                    case 3: coordx = 2; break;
+                }
+                System.out.println("STVOREN NOVI PLANET");
+                System.out.print("Y POZICIJA NOVOG PLANETA: ");
+                System.out.println(planet.getPosition().y);
+                System.out.print("X POZICIJA NOVOG PLANETA: ");
+                System.out.println(planet.getPosition().x);
+
+                if (brojacPlaneta%3==0) {
+                    moon = new Moon(new Vector2(planet.getPosition().x+150, planet.getPosition().y+50), new Vector2(-10, -17), new Vector2(0,0), 1);
+                }
+
+                planetCreationInProgress = false;
+            }
         }
 
         /*

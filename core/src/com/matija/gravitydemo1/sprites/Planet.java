@@ -36,14 +36,15 @@ public class Planet implements Drawable{
      * @param acceleration Akceleracija planeta, u pravilu 0
      * @param mass Masa planeta
      */
-    public Planet(Vector2 position,Vector2 velocity,Vector2 acceleration, double mass){
+    public Planet(Vector2 position,Vector2 velocity,Vector2 acceleration, double mass, int radius){
         this.position = new Vector2(position.x,position.y);
         this.velocity = new Vector2(velocity.x,velocity.y);
         this.acceleration = new Vector2(acceleration.x,acceleration.y);
         this.mass = mass;
        // model = new SpriteGraphicsModel("earth.gif");
         model = new GifGraphicsModel("earth/frame1.gif",36);
-        radius = 190;
+        //model = new GifGraphicsModel("jupiter2/frame_00.gif", 54);
+        this.radius = radius;
         //   circle = new Sprite("rocket.png");
         bounds = new Circle(position.x,position.y,radius);
     }
@@ -75,6 +76,23 @@ public class Planet implements Drawable{
         return mass;
     }
 
+    public void setPosition(Vector2 position) {
+        this.position = new Vector2(position.x,position.y);
+    }
+
+    public void setPosition(float x, float y) {
+        this.position.x = x;
+        this.position.y = y;
+    }
+
+    public void setRadius(int rad) {
+        this.radius = rad;
+    }
+
+    public void setMass(int masa) {
+        this.mass = masa;
+    }
+
     public void setAcceleration(Vector2 acceleration) {
         this.acceleration = acceleration;
     }
@@ -84,11 +102,15 @@ public class Planet implements Drawable{
         this.acceleration.y = y;
     }
 
+    public void setBounds() {
+        bounds = new Circle(position.x,position.y,radius);
+    }
+
 
     @Override
     public void draw(SpriteBatch sb) {
        // sb.draw(model.texture,position.x-250, position.y-250 ,500,500);
-        model.sprite.setSize(500,500);
+        model.sprite.setSize(radius*2,radius*2);
         model.sprite.setCenter(position.x,position.y);
         model.sprite.draw(sb);
         try {

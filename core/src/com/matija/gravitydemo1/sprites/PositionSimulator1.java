@@ -208,4 +208,8 @@ public class PositionSimulator1 {
     public int getIndex(){
         return this.index;
     }
+
+    public void setInitialized(boolean initialized){
+        this.initialized=initialized;
+    }
 }
