@@ -111,6 +111,7 @@ public class Planet implements Drawable{
     public void draw(SpriteBatch sb) {
        // sb.draw(model.texture,position.x-250, position.y-250 ,500,500);
         model.sprite.setSize(radius*2,radius*2);
+
         model.sprite.setCenter(position.x,position.y);
         model.sprite.draw(sb);
         try {

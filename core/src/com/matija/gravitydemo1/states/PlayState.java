@@ -2,10 +2,14 @@ package com.matija.gravitydemo1.states;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.matija.gravitydemo1.GravityDemo1;
 import com.matija.gravitydemo1.sprites.Moon;
 import com.matija.gravitydemo1.sprites.MovementSimulator;
@@ -42,6 +46,8 @@ public class PlayState extends State {
    // private PositionSimulator ps;
     private MovementSimulator ms;
     private PositionSimulator1 ps;
+
+    private Label debug;
 
     private ControlBoard controlBoard;
     /**
@@ -93,10 +99,13 @@ public class PlayState extends State {
         Inicijalizacija kontrolne ploce
          */
 
-        /*
-        controlBoard = new ControlBoard(rocket, new SpriteBatch());
+
+        controlBoard = new ControlBoard(rocket, new SpriteBatch(), cam);
         controlBoard.create();
-        */
+
+        Label.LabelStyle ls = new Label.LabelStyle(new BitmapFont(), Color.FIREBRICK);
+        debug = new Label("      ", ls);
+
     }
 
 
@@ -106,7 +115,7 @@ public class PlayState extends State {
      */
     public void handleInput() {
         //Stari input, novi je u klasi ControlBoard
-
+        /*
         if (Gdx.input.isTouched()){
 
             if (Gdx.input.getX()<Gdx.graphics.getWidth()/2)
@@ -117,7 +126,7 @@ public class PlayState extends State {
             potisak = true;
            // System.out.println("x koordinata dodira "+ Gdx.input.getX() + "x koordinata rakete "+ rocket.getPosition().x + Gdx.graphics.getWidth());
         }
-
+        */
     }
 
     /**
@@ -126,7 +135,7 @@ public class PlayState extends State {
      */
     @Override
     public void update(float dt) {
-        handleInput();  //provjerava se input
+        //handleInput();  //provjerava se input
 
         float x = rocket.getPosition().x;
         float y = rocket.getPosition().y;   //dohvaća se trenutna pozicija rakete
@@ -153,7 +162,8 @@ public class PlayState extends State {
         cam.position.y = cam.position.y + (rocket.getPosition().y - y); //pomicanje kamere
         cam.update(); //ažuriranje kamere
 
-
+        //Azuriranje kontrolne ploce
+        controlBoard.update(dt);
     }
 
     @Override
@@ -173,6 +183,7 @@ public class PlayState extends State {
                             rakete u središtu rakete, da bi se dobio donji lijevi kut, potrebno je od središta oduzeti
                             polovicu duljine i širine slike.
          */
+
 
        rocket.draw(sb);
        moon.draw(sb);
@@ -302,13 +313,20 @@ public class PlayState extends State {
 
         }
 
+
+
+
+
+        //Inace ne iscrta putanju, nema nikakvog smisla
+
+        debug.draw(sb, 0);
         /*
         Iscrtavanje kontrolne ploce --Marin
          */
 
-        /*
+
         controlBoard.render();
-        */
+
         sb.end();
     }
 
