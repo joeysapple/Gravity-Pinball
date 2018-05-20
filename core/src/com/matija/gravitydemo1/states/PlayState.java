@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -198,6 +199,7 @@ public class PlayState extends State {
 
         //Azuriranje kontrolne ploce
         controlBoard.update(dt);
+        this.extraPoints();
     }
 
     @Override
@@ -241,13 +243,13 @@ public class PlayState extends State {
         if (planet.getBounds().overlaps(rocket.getBounds()) || moon.getBounds().overlaps(rocket.getBounds())){
            // System.out.println("preklapanje");
             dispose();
-            gsm.set(new GameOverState(gsm));
+            gsm.set(new GameOverState(gsm,rocket.getPoints()));
         }
 
         //raketa je izvan granice
         if (rocket.getPosition().x<0 || rocket.getPosition().x>GravityDemo1.WIDTH || rocket.getPosition().y<downLimit+GravityDemo1.HEIGHT/2){
             dispose();
-            gsm.set(new GameOverState(gsm));
+            gsm.set(new GameOverState(gsm,rocket.getPoints()));
         }
 
 
@@ -297,7 +299,7 @@ public class PlayState extends State {
                         else { WORMHOLE } (zasad placeholder zaustavi igru)
                     */
                     dispose();
-                    gsm.set(new GameOverState(gsm));
+                    gsm.set(new GameOverState(gsm,rocket.getPoints()));
                 }
 
                 int rad = 60 + brojacPlaneta * 10;
@@ -314,6 +316,10 @@ public class PlayState extends State {
                 planet.setMass(rad);
                 //planet.setOneOfModel(0);
                 planet.setNextModel();
+
+                planet.setCanGetPoints(true);
+                rocket.increasePoints(5);
+                Gdx.input.vibrate(500);
                 ps.setInitialized(false);
                 moon.reposition(planet);
                 downLimit = (int) (rocket.getPosition().y - (GravityDemo1.HEIGHT/2+150));
@@ -383,6 +389,15 @@ public class PlayState extends State {
         sb.end();
     }
 
+    private void extraPoints(){
+        if (Intersector.intersectSegmentCircle(planet.getPosition(),moon.getPosition(),new Vector2(rocket.getBounds().x,rocket.getBounds().y),rocket.getBounds().radius)){
+            if (planet.canGetPoints()) {
+                Gdx.input.vibrate(500);
+                rocket.increasePoints(20);
+                planet.setCanGetPoints(false);
+            }
+        }
+    }
     @Override
     public void dispose() {
        rocket.dispose();

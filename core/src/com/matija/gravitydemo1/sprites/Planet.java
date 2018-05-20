@@ -35,6 +35,7 @@ public class Planet implements Drawable{
     private List<GraphicsModel> models;
     private int currentModel;
     private int numberOfModels=2;
+    private boolean canGetPoints;
     /**
      * Konstruktor za planet
      * @param position Pozicija planeta
@@ -59,6 +60,8 @@ public class Planet implements Drawable{
         //   circle = new Sprite("rocket.png");
         bounds = new Circle(position.x,position.y,radius);
         currentModel=1;
+
+        this.canGetPoints = true;
     }
 
     /*
@@ -146,5 +149,13 @@ public class Planet implements Drawable{
         currentModel++;
         currentModel%=numberOfModels;
         model=models.get(currentModel);
+    }
+
+    public void setCanGetPoints(boolean can){
+        this.canGetPoints = can;
+    }
+
+    public  boolean canGetPoints(){
+        return this.canGetPoints;
     }
 }

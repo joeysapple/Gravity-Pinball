@@ -237,6 +237,7 @@ public class ControlBoard implements ApplicationListener{
         iznosBrzine = (double)Math.round(iznosBrzine * 100d)/100d;
 
         brzinaIznosB.setText(String.format("%3.2f",iznosBrzine));
+        bodoviIznosB.setText(rocket.getPoints()+"");
 
     }
 

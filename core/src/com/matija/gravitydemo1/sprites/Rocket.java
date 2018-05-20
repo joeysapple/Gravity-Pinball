@@ -27,6 +27,7 @@ public class Rocket implements Drawable,Movable{
     private Circle bounds;
     private Vector2 oldAcc;
     private GraphicsModel model;
+    private int points;
 
 
     /**
@@ -67,6 +68,7 @@ public class Rocket implements Drawable,Movable{
         oldAcc = new Vector2(posDiff.x,posDiff.y);
       //  System.out.println("u stvaranju acc" + " "+ posDiff);
      //   circle = new Sprite("rocket.png");
+        points=0;
     }
 
     @Override
@@ -175,6 +177,18 @@ public class Rocket implements Drawable,Movable{
         bounds.setPosition(position.x,position.y);*/
 
 
+    }
+
+    public void setPoints(int points){
+        this.points=points;
+    }
+
+    public void increasePoints(int value){
+        this.points+=value;
+    }
+
+    public int getPoints(){
+        return this.points;
     }
 
 
