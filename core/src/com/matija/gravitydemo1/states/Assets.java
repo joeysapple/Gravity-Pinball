@@ -15,7 +15,7 @@ public class Assets {
     public static final String rocket = "rocketRight2.png";
     public static final String jupiter = "jupiter.png";
     public static final String background = "space.jpg";
-    public static final String redBackground = "redBackground3.png";
+    public static final String redBackground = "nebula10green.png";
     public static final List<String> earth = earthStrings();
     public static final List<String> weirdPlanet = weirdStrings();
     public static final List<String> moon = moonStrings();
