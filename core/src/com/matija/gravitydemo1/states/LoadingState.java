@@ -90,7 +90,7 @@ public class LoadingState extends State {
     public void update(float dt) {
       if(Assets.manager.update() && progress>=1.0f){
           this.dispose();
-          gsm.set(new PlayState(gsm));
+          gsm.set(new MenuState(gsm));
       }
 
     }
@@ -129,9 +129,19 @@ public class LoadingState extends State {
         Assets.manager.load(Assets.rocket,Texture.class);
         Assets.manager.load(Assets.jupiter,Texture.class);
         Assets.manager.load("sphere.png",Texture.class);
+        Assets.manager.load(Assets.background,Texture.class);
+        Assets.manager.load(Assets.redBackground,Texture.class);
 
-        for (int i=0;i<36;i++){
+        for (int i=0;i<50;i++){
             Assets.manager.load(Assets.earth.get(i),Texture.class);
+        }
+
+        for (int i=0;i<50;i++){
+            Assets.manager.load(Assets.weirdPlanet.get(i),Texture.class);
+        }
+
+        for (int i=0;i<50;i++){
+            Assets.manager.load(Assets.moon.get(i),Texture.class);
         }
     }
 }

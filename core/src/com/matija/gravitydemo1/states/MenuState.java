@@ -44,7 +44,7 @@ public class MenuState extends State{
             //Rectangle textureBounds=new Rectangle(cam.position.x - playBtn.getWidth() / 2, cam.position.y,playBtn.getWidth(),playBtn.getHeight());
 
             if(boundPlay.contains(tmp.x,tmp.y)) {
-                gsm.set(new LoadingState(gsm));
+                gsm.set(new PlayState(gsm));
             }
             if(boundHelp.contains(tmp.x,tmp.y)) {
                 gsm.set(new HelpState(gsm));

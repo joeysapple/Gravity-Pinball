@@ -3,6 +3,10 @@ package com.matija.gravitydemo1.sprites;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
+import com.matija.gravitydemo1.GravityDemo1;
+import com.matija.gravitydemo1.states.PlayState;
+
+import javax.naming.OperationNotSupportedException;
 
 /**
  * Created by Korisnik on 24.4.2018..
@@ -25,7 +29,7 @@ public class Moon implements Drawable,Movable {
         this.mass = mass;
         radius = 25;
         bounds = new Circle(position.x,position.y,radius);
-        model = new SpriteGraphicsModel("jupiter.png");
+        model = new GifGraphicsModel("moon/frame (1).png",50);
 
 
 
@@ -47,11 +51,39 @@ public class Moon implements Drawable,Movable {
 
     @Override
     public void draw(SpriteBatch sb) {
-        sb.draw(model.texture, position.x-radius, position.y-radius,2*radius,2*radius);
+       // sb.draw(model.texture, position.x-radius, position.y-radius,2*radius,2*radius);
+        model.sprite.setSize(radius*2,radius*2);
+
+        model.sprite.setCenter(position.x,position.y);
+        model.sprite.draw(sb);
+        try {
+            model.changeState();
+        } catch (OperationNotSupportedException e) {
+            e.printStackTrace();
+        }
     }
+
+
 
     @Override
     public void dispose() {
         model.dispose();
+    }
+
+    public void reposition(Planet planet){
+        this.position.set(planet.getPosition().x+planet.getRadius()*2,planet.getPosition().y);
+        int velocity = (int)Math.sqrt(PlayState.G*planet.getMass()/(planet.getRadius()*2 ));
+
+        this.radius = planet.getRadius()/4;
+        this.velocity.set(0,-velocity);
+        this.bounds.radius = radius;
+    }
+
+    public void setBounds(){
+        this.bounds.setPosition(position.x,position.y);
+    }
+
+    public Circle getBounds(){
+        return this.bounds;
     }
 }

@@ -50,7 +50,7 @@ public class Rocket implements Drawable,Movable{
         this.mass = mass;
         this.model = new SpriteGraphicsModel(Assets.rocket);
         model.sprite.setSize(40,40);
-        bounds = new com.badlogic.gdx.math.Circle(position.x,position.y,20);
+        bounds = new com.badlogic.gdx.math.Circle(position.x,position.y,18);
 
         /**
          * Ovo je inicijalizacija za potrebe Verletove metode integracije

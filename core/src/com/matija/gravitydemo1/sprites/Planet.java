@@ -8,6 +8,9 @@ import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.math.Circle;
 import com.matija.gravitydemo1.states.PlayState;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.naming.OperationNotSupportedException;
 
 /**
@@ -29,6 +32,9 @@ public class Planet implements Drawable{
     private Circle bounds;
     private int radius;
     private GraphicsModel model;
+    private List<GraphicsModel> models;
+    private int currentModel;
+    private int numberOfModels=2;
     /**
      * Konstruktor za planet
      * @param position Pozicija planeta
@@ -37,16 +43,22 @@ public class Planet implements Drawable{
      * @param mass Masa planeta
      */
     public Planet(Vector2 position,Vector2 velocity,Vector2 acceleration, double mass, int radius){
+        this.models = new ArrayList<GraphicsModel>();
         this.position = new Vector2(position.x,position.y);
         this.velocity = new Vector2(velocity.x,velocity.y);
         this.acceleration = new Vector2(acceleration.x,acceleration.y);
         this.mass = mass;
        // model = new SpriteGraphicsModel("earth.gif");
-        model = new GifGraphicsModel("earth/frame1.gif",36);
+        model = new GifGraphicsModel("weirdPlanet/frame (1).png",50);
+        models.add(model);
+
+        model = new GifGraphicsModel("earth/frame (1).png",50);
+        models.add(model);
         //model = new GifGraphicsModel("jupiter2/frame_00.gif", 54);
         this.radius = radius;
         //   circle = new Sprite("rocket.png");
         bounds = new Circle(position.x,position.y,radius);
+        currentModel=1;
     }
 
     /*
@@ -124,5 +136,15 @@ public class Planet implements Drawable{
     @Override
     public void dispose(){
         model.dispose();
+    }
+
+    public void setOneOfModel(int n){
+        model = models.get(n);
+    }
+
+    public void setNextModel(){
+        currentModel++;
+        currentModel%=numberOfModels;
+        model=models.get(currentModel);
     }
 }

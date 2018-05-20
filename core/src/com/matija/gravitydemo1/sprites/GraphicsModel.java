@@ -24,7 +24,7 @@ public abstract class GraphicsModel {
     }
 
     public void dispose(){
-        texture.dispose();
+        //texture.dispose();
     }
     public abstract void changeState() throws OperationNotSupportedException;
 

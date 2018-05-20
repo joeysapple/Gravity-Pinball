@@ -35,7 +35,7 @@ public class GravityDemo1 extends ApplicationAdapter {
 			System.out.println(s);
 		}
 		//TODO promjenit nazad u menu state
-		gsm.push(new MenuState(gsm));
+		gsm.push(new LoadingState(gsm));
 
 	}
 
@@ -51,7 +51,9 @@ public class GravityDemo1 extends ApplicationAdapter {
 	
 	@Override
 	public void dispose () {
+		System.out.println("Sve se disposa");
 		batch.dispose();
 		img.dispose();
+		Assets.manager.dispose();
 	}
 }

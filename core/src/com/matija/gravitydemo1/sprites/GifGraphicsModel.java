@@ -35,7 +35,8 @@ public class GifGraphicsModel extends GraphicsModel {
         counter = 0;
         for (int i=0;i<size;i++){
             StringBuilder sb = new StringBuilder(path);
-            sb.append("frame" + (i+1) + ".gif");
+            sb.append("frame (" + (i+1) + ").png");
+            System.out.println("Load "+sb.toString());
            // Texture t = new Texture(Gdx.files.internal(sb.toString()));
             Texture t = Assets.manager.get(sb.toString(),Texture.class);
 
@@ -71,7 +72,7 @@ public class GifGraphicsModel extends GraphicsModel {
     public void dispose(){
         super.dispose();
         for (Texture t:textures){
-            t.dispose();
+           // t.dispose();
         }
 
    }
