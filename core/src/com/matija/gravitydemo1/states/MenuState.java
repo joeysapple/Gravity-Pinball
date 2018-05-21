@@ -21,12 +21,21 @@ public class MenuState extends State{
         super(gsm);
         //za mob
         cam.setToOrtho(false, Menus.WIDTH/2, Menus.HEIGHT /2 );
+
         title = new Texture("menu2.png");
         background = new Texture("background.png");
         playBtn = new Texture("button_play.png");
         hsBtn = new Texture("button_highscore.png");
         helpBtn = new Texture("button_help.png");
         exitBtn = new Texture("button_exit.png");
+
+        //Smooth
+        title.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        background.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        playBtn.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        hsBtn.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        helpBtn.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        exitBtn.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
         boundPlay=new Rectangle(cam.position.x - playBtn.getWidth() / 2, cam.position.y*1.25f,playBtn.getWidth(),playBtn.getHeight());
         boundHigh=new Rectangle(cam.position.x - hsBtn.getWidth() / 2, cam.position.y*1f,hsBtn.getWidth(),hsBtn.getHeight());

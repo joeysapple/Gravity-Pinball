@@ -58,6 +58,12 @@ public class PlayState extends State {
 
     private ControlBoard controlBoard;
     private int downLimit = -GravityDemo1.HEIGHT/2-150;
+
+  /*  private boolean initState = true;
+    private BitmapFont font;
+    private double currentMil;
+    private double timeCounter;
+    private int currentSec;*/
     /**
      * Konstruktor
      * @param gsm gsm
@@ -123,7 +129,9 @@ public class PlayState extends State {
         /*
         Inicijalizacija glazbe
          */
-        music = Gdx.audio.newMusic(Gdx.files.internal("rocketSound.mp3"));
+       // music = Gdx.audio.newMusic(Gdx.files.internal("rocketSound.mp3"));
+        music = Assets.manager.get(Assets.sound,Music.class);
+
         music.setLooping(true);
         music.setVolume(0.90f);
         music.play();
@@ -139,6 +147,14 @@ public class PlayState extends State {
         Label.LabelStyle ls = new Label.LabelStyle(new BitmapFont(), Color.FIREBRICK);
         debug = new Label("      ", ls);
 
+      /*  font = new BitmapFont();
+        font.setColor(Color.GOLD);
+        font.getData().setScale(2.8f);
+        font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+
+        currentMil = System.currentTimeMillis();
+        timeCounter = 0;
+        currentSec = 3;*/
     }
 
 
@@ -169,6 +185,7 @@ public class PlayState extends State {
     @Override
     public void update(float dt) {
         //handleInput();  //provjerava se input
+      /*  if (initState) {initState();}*/
 
         float x = rocket.getPosition().x;
         float y = rocket.getPosition().y;   //dohvaća se trenutna pozicija rakete
@@ -187,10 +204,6 @@ public class PlayState extends State {
             //simulacija putanje na temelju trenutnih parametara
         potisak = false;
         noviKvadrat = false;
-        int j=0;
-        for (int i=0;i<10000;i++){
-            j++;
-        }
 
         cam.position.x = cam.position.x + (rocket.getPosition().x - x);
         cam.position.y = cam.position.y + (rocket.getPosition().y - y); //pomicanje kamere*/
@@ -386,6 +399,9 @@ public class PlayState extends State {
 
         controlBoard.render();
 
+      /*  if (initState){
+            font.draw(sb,currentSec+"",GravityDemo1.WIDTH/2,GravityDemo1.HEIGHT/2);
+        }*/
         sb.end();
     }
 
@@ -404,9 +420,25 @@ public class PlayState extends State {
        planet.dispose();
        moon.dispose();
        music.stop();
-       music.dispose();
+      // music.dispose();
        ps.dispose();
+       controlBoard.dispose();
       // Assets.newManager();
     }
+
+  /*  private void initState(){
+        double currentM = System.currentTimeMillis();
+        timeCounter+=(currentM - currentMil);
+        currentMil = currentM;
+
+        if (timeCounter>1000){
+            timeCounter=0;
+            currentSec--;
+            if (currentSec==0){
+                initState=false;
+            }
+        }
+
+    }*/
 
 }

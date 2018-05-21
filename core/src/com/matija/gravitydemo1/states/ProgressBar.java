@@ -44,6 +44,8 @@ public class ProgressBar implements Drawable {
        font.setColor(Color.GOLD);
        font.getData().setScale(0.8f);
 
+       //Smooth
+       font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
        calculateX();
        marksInit();
     }

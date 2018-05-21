@@ -1,6 +1,9 @@
 package com.matija.gravitydemo1.states;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.loaders.FileHandleResolver;
+import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -8,6 +11,9 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
+import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -131,7 +137,17 @@ public class LoadingState extends State {
         Assets.manager.load("sphere.png",Texture.class);
         Assets.manager.load(Assets.background,Texture.class);
         Assets.manager.load(Assets.redBackground,Texture.class);
+        Assets.manager.load(Assets.sound, Music.class);
 
+       /* FileHandleResolver resolver = new InternalFileHandleResolver();
+        Assets.manager.setLoader(FreeTypeFontGenerator.class, new FreeTypeFontGeneratorLoader(resolver));
+        Assets.manager.setLoader(BitmapFont.class, ".TTF", new FreetypeFontLoader(resolver));*/
+
+      //  Assets.manager.load(Assets.textGen, BitmapFont.class);
+
+        Assets.manager.load(Assets.touchpadBg,Texture.class);
+        Assets.manager.load(Assets.touchKnob, Texture.class);
+        Assets.loadFont();
         for (int i=0;i<50;i++){
             Assets.manager.load(Assets.earth.get(i),Texture.class);
         }

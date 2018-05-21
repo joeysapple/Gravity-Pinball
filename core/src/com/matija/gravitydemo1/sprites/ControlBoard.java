@@ -31,6 +31,7 @@ import com.matija.gravitydemo1.sprites.Rocket;
 
 import static com.badlogic.gdx.Gdx.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.matija.gravitydemo1.states.Assets;
 
 
 /*
@@ -73,7 +74,9 @@ public class ControlBoard implements ApplicationListener{
 
 */
 
-    private FreeTypeFontGenerator fontGen = new FreeTypeFontGenerator(Gdx.files.internal("Comic_sans.ttf"));
+    //private FreeTypeFontGenerator fontGen = new FreeTypeFontGenerator(Gdx.files.internal("Comic_sans.ttf"));
+     private FreeTypeFontGenerator fontGen = Assets.fontGen;
+
     FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
 
     private Text brzinaB;
@@ -91,14 +94,23 @@ public class ControlBoard implements ApplicationListener{
         mass = rocket.getMass();
         velocity = rocket.getVelocity();
 
-
-
-
         //Inicijalizacija touchpada
 
         touchpadSkin = new Skin();
-        touchpadSkin.add("touchBackground", new Texture("touchpadBg.png"));
-        touchpadSkin.add("touchKnob", new Texture("touchKnob.png"));
+
+        Texture touchpadBgTexture = Assets.manager.get(Assets.touchpadBg,Texture.class);
+        Texture touchKnobTexture = Assets.manager.get(Assets.touchKnob,Texture.class);
+
+        //Smooth
+        touchpadBgTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        touchKnobTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+
+    /*    touchpadSkin.add("touchBackground", new Texture("touchpadBg.png"));
+            touchpadSkin.add("touchKnob", new Texture("touchKnob.png"));*/
+
+        touchpadSkin.add("touchBackground", touchpadBgTexture);
+        touchpadSkin.add("touchKnob", touchKnobTexture);
+
 
         touchpadStyle = new Touchpad.TouchpadStyle();
         touchpadSkin.getDrawable("touchBackground").setMinHeight(70);
@@ -141,6 +153,14 @@ public class ControlBoard implements ApplicationListener{
         bodoviB = new Text("Score: ", fontGen, parameter, 5, 395);
         bodoviIznosB = new Text("0", fontGen, parameter, 10, 375);
 
+        //Smooth
+        brzinaB.font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        akceleracijaB.font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        bodoviB.font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+
+        brzinaIznosB.font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        bodoviIznosB.font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        akceleracijaIznosB.font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
         //Viewport
         viewport = new StretchViewport(GravityDemo1.WIDTH/2, GravityDemo1.HEIGHT/2,

@@ -27,9 +27,16 @@ public class HelpState extends State{
         super(gsm);
         //za mob
         cam.setToOrtho(false, Menus.WIDTH/2, Menus.HEIGHT /2);
+
         background = new Texture("background.png");
         title = new Texture("help.png");
         backBtn = new Texture("button_back.png");
+
+        //Smooth
+        background.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        title.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        backBtn.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+
         boundBack=new Rectangle(cam.position.x - backBtn.getWidth() / 2, cam.position.y*0.75f,backBtn.getWidth(),backBtn.getHeight());
         //skin = new Skin();
         //helpText = new TextButton("This is the help text", skin);

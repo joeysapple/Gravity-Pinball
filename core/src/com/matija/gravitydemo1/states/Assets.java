@@ -1,6 +1,9 @@
 package com.matija.gravitydemo1.states;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.matija.gravitydemo1.sprites.ControlBoard;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -16,10 +19,17 @@ public class Assets {
     public static final String jupiter = "jupiter.png";
     public static final String background = "space.jpg";
     public static final String redBackground = "nebula15pink.png";
+    public static final String sound = "rocketSound.mp3";
+    public static final String textGen = "Comic_sans.ttf";
+    public static final String touchpadBg = "touchpadBg.png";
+    public static final String touchKnob = "touchKnob.png";
+
     public static final List<String> earth = earthStrings();
     public static final List<String> weirdPlanet = weirdStrings();
     public static final List<String> moon = moonStrings();
     public static AssetManager manager = new AssetManager();
+
+    public static FreeTypeFontGenerator fontGen;
 
     private static ArrayList<String> earthStrings() {
         ArrayList<String> strings = new ArrayList<String>();
@@ -77,6 +87,15 @@ public class Assets {
     public static void newManager(){
         manager.dispose();
         manager = new AssetManager();
+    }
+
+    public static void loadFont(){
+        fontGen = new FreeTypeFontGenerator(Gdx.files.internal("Comic_sans.ttf"));
+    }
+
+    public static void dispose(){
+        manager.dispose();
+        fontGen.dispose();
     }
 
 }

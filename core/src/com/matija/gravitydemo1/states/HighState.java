@@ -50,6 +50,12 @@ public class HighState extends State{
         title = new Texture("highscore1.png");
         clrBtn = new Texture("button_clear.png");
 
+        //Smooth
+        background.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        backbtn.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        title.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        clrBtn.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+
         boundBack=new Rectangle(cam.position.x*1.05f, cam.position.y*0.25f-backbtn.getHeight(),backbtn.getWidth(),backbtn.getHeight());
         boundClear=new Rectangle(cam.position.x - clrBtn.getWidth()*1.05f, cam.position.y*0.25f-clrBtn.getHeight(),clrBtn.getWidth(),clrBtn.getHeight());
 
@@ -59,7 +65,8 @@ public class HighState extends State{
         parameter.borderWidth = 1;
         font = fontGen.generateFont(parameter);
         fontGen.dispose();
-
+        //Smooth
+        font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
     }
 

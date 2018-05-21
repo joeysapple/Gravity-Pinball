@@ -26,10 +26,10 @@ public class GravityDemo1 extends ApplicationAdapter {
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		img = new Texture("badlogic.jpg");
+		//img = new Texture("badlogic.jpg");
 		gsm = new GameStateManager(this);
 		assets = new AssetManager();
-		Gdx.gl.glClearColor(1, 0, 0, 1);
+		//Gdx.gl.glClearColor(1, 0, 0, 1);
 
 		for (String s: Assets.earth){
 			System.out.println(s);
@@ -53,7 +53,8 @@ public class GravityDemo1 extends ApplicationAdapter {
 	public void dispose () {
 		System.out.println("Sve se disposa");
 		batch.dispose();
-		img.dispose();
-		Assets.manager.dispose();
+	//	img.dispose();
+		//Assets.manager.dispose();
+		Assets.dispose();
 	}
 }
