@@ -48,11 +48,16 @@ public class GameOverState extends State{
     private Rectangle boundDown3;
 
 
-    public GameOverState(GameStateManager gsm) {
+    public GameOverState(GameStateManager gsm, int points, boolean win) {
         super(gsm);
         cam.setToOrtho(false, Menus.WIDTH/2, Menus.HEIGHT /2);
         background = new Texture("background.png");
-        title = new Texture("gameover.png");
+        if (win == true) {
+            title = new Texture("win.png");
+        }
+        else{
+            title = new Texture("gameover.png");
+        }
         menuBtn = new Texture("button_menu.png");
         highBtn = new Texture("button_highscore.png");
         saveBtn = new Texture("button_save.png");
@@ -75,7 +80,7 @@ public class GameOverState extends State{
         j = 0;
         k = 0;
         //dohvati score
-        score = 20;
+        score = points;
 
         if (pref.getString("5").equals("") && score > 0 || score > Integer.parseInt(pref.getString("5", "aaa:0").split(":")[1])){
             highscore = true;

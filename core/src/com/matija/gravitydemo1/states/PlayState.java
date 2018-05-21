@@ -1,15 +1,19 @@
 package com.matija.gravitydemo1.states;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.utils.viewport.FillViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.matija.gravitydemo1.GravityDemo1;
 import com.matija.gravitydemo1.sprites.Moon;
 import com.matija.gravitydemo1.sprites.MovementSimulator;
@@ -38,6 +42,9 @@ public class PlayState extends State {
     private int pom;
 
     private Sprite backroundSprite;
+    private Sprite redBackgroundSpriteLeft;
+    private Sprite redBackgroundSpriteRight;
+    private Sprite redBackgroundSpriteDown;
     private Music music;
     public boolean potisak = true;
     public final static Vector2 otherCirclePos = new Vector2(GravityDemo1.WIDTH/4,250);
@@ -50,6 +57,7 @@ public class PlayState extends State {
     private Label debug;
 
     private ControlBoard controlBoard;
+    private int downLimit = -GravityDemo1.HEIGHT/2-150;
     /**
      * Konstruktor
      * @param gsm gsm
@@ -59,14 +67,20 @@ public class PlayState extends State {
         /*
         Inicijalizacija kamere
          */
-        cam.setToOrtho(false, GravityDemo1.WIDTH/2,GravityDemo1.HEIGHT/2);
-        cam.position.y = cam.position.y-100;
+        //cam.position.set(cam.viewportWidth/2,cam.viewportHeight/2,0);
+        cam.setToOrtho(false, GravityDemo1.WIDTH,GravityDemo1.HEIGHT);
+
+
+
+        //cam.position.y = cam.position.y-GravityDemo1.WIDTH/2;
+        cam.position.y=cam.position.y-300;
         /*
         Instanciranje rakete i planeta
          */
-        rocket = new Rocket(new Vector2(GravityDemo1.WIDTH/4,50),new Vector2((float) 20,0),new Vector2(0,0),1);
-        planet = new Planet(new Vector2(GravityDemo1.WIDTH/4,250),new Vector2(0,0),new Vector2(0,0),100,170);
+        rocket = new Rocket(new Vector2(GravityDemo1.WIDTH/2,0),new Vector2((float) 10,0),new Vector2(0,0),1);
+        planet = new Planet(new Vector2(GravityDemo1.WIDTH/2,250),new Vector2(0,0),new Vector2(0,0),60,60);
         moon = new Moon(new Vector2(400,400),new Vector2(-10,-17),new Vector2(0,0),1);
+        moon.reposition(planet);
         //za beskonacnu verziju: boolean ascOrDesc = true;
         brojacPlaneta = 1;
         coordx = 2;
@@ -75,9 +89,28 @@ public class PlayState extends State {
         /*
         Inicijalizacija pozadine
          */
-        Texture backround = new Texture(Gdx.files.internal("space.jpg"));
-        backround.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        backroundSprite = new Sprite(backround);
+        Texture background = Assets.manager.get(Assets.background,Texture.class);
+        background.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        backroundSprite = new Sprite(background);
+        backroundSprite.setSize(GravityDemo1.WIDTH,GravityDemo1.HEIGHT);
+
+        Texture redBackground = Assets.manager.get(Assets.redBackground,Texture.class);
+        redBackground.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+
+        //lijeva granica
+        redBackgroundSpriteLeft = new Sprite(redBackground);
+        redBackgroundSpriteLeft.setSize(GravityDemo1.WIDTH,GravityDemo1.HEIGHT);
+        redBackgroundSpriteLeft.setCenter(-GravityDemo1.WIDTH/2,cam.position.y);
+
+        //desna granica
+        redBackgroundSpriteRight = new Sprite(redBackground);
+        redBackgroundSpriteRight.setSize(GravityDemo1.WIDTH,GravityDemo1.HEIGHT);
+        redBackgroundSpriteRight.setCenter(GravityDemo1.WIDTH + GravityDemo1.WIDTH/2,cam.position.y);
+
+        //donja granica
+        redBackgroundSpriteDown = new Sprite(redBackground);
+        redBackgroundSpriteDown.setSize(GravityDemo1.WIDTH,GravityDemo1.HEIGHT);
+        redBackgroundSpriteDown.setCenter(GravityDemo1.WIDTH/2 + GravityDemo1.WIDTH/2,downLimit);
 
      //   ps = new PositionSimulator(rocket,planet);
         ps = new PositionSimulator1();
@@ -147,6 +180,7 @@ public class PlayState extends State {
         ms.move(moon, planet,dt);
 
         rocket.getBounds().setPosition(rocket.getPosition().x,rocket.getPosition().y);
+        moon.setBounds();
         ps.simulate(dt);
         rocket.setAcceleration(0,0);
 
@@ -159,11 +193,13 @@ public class PlayState extends State {
         }
 
         cam.position.x = cam.position.x + (rocket.getPosition().x - x);
-        cam.position.y = cam.position.y + (rocket.getPosition().y - y); //pomicanje kamere
+        cam.position.y = cam.position.y + (rocket.getPosition().y - y); //pomicanje kamere*/
+
         cam.update(); //ažuriranje kamere
 
         //Azuriranje kontrolne ploce
         controlBoard.update(dt);
+        this.extraPoints();
     }
 
     @Override
@@ -173,9 +209,18 @@ public class PlayState extends State {
 
 
 
-      //  cam.zoom = 2.0f;
+        //cam.zoom = 5.0f;
         backroundSprite.setCenter(cam.position.x,cam.position.y);
         backroundSprite.draw(sb); //iscrtanjanje pozadine
+
+        redBackgroundSpriteLeft.setCenter(-GravityDemo1.WIDTH/2,cam.position.y);
+        redBackgroundSpriteLeft.draw(sb); //iscrtanjanje pozadine
+
+        redBackgroundSpriteRight.setCenter(GravityDemo1.WIDTH + GravityDemo1.WIDTH/2,cam.position.y);
+        redBackgroundSpriteRight.draw(sb); //iscrtanjanje pozadine
+
+        redBackgroundSpriteDown.setCenter(GravityDemo1.WIDTH/2 ,downLimit);
+        redBackgroundSpriteDown.draw(sb);
 
         /*
         Iscrtavanje rakete. Prvi parametar je grafički model rakete (slika rakete)
@@ -195,12 +240,17 @@ public class PlayState extends State {
         /*
         Provjera je li došlo do sudara. Ukoliko jest, igra završava
          */
-        if (planet.getBounds().overlaps(rocket.getBounds())){
+        if (planet.getBounds().overlaps(rocket.getBounds()) || moon.getBounds().overlaps(rocket.getBounds())){
            // System.out.println("preklapanje");
             dispose();
-            gsm.set(new GameOverState(gsm));
+            gsm.set(new GameOverState(gsm,rocket.getPoints(), false));
         }
 
+        //raketa je izvan granice
+        if (rocket.getPosition().x<0 || rocket.getPosition().x>GravityDemo1.WIDTH || rocket.getPosition().y<downLimit+GravityDemo1.HEIGHT/2){
+            dispose();
+            gsm.set(new GameOverState(gsm,rocket.getPoints(), false));
+        }
 
 
         //printanje samo svaki deseti put
@@ -225,7 +275,7 @@ public class PlayState extends State {
         float deltaX = rocket.getPosition().x - planet.getPosition().x;
         double distance =Math.sqrt(deltaY*deltaY + deltaX*deltaX);
         if (distance > planet.getRadius()*2) {*/
-        if (rocket.getPosition().y > planet.getPosition().y+ planet.getRadius()*1.2) {
+        if (rocket.getPosition().y > planet.getPosition().y+ planet.getRadius()+GravityDemo1.HEIGHT/2) {
 
 
             System.out.println("TU STVARAMO NOVI PLANET");
@@ -249,7 +299,7 @@ public class PlayState extends State {
                         else { WORMHOLE } (zasad placeholder zaustavi igru)
                     */
                     dispose();
-                    gsm.set(new GameOverState(gsm));
+                    gsm.set(new GameOverState(gsm,rocket.getPoints(), true));
                 }
 
                 int rad = 60 + brojacPlaneta * 10;
@@ -260,15 +310,24 @@ public class PlayState extends State {
                 //planet = new Planet(new Vector2(GravityDemo1.WIDTH * coordx / 4, rocket.getPosition().y + 150), new Vector2(0, 0), new Vector2(0, 0), rad, rad);
                 //ps.setPlanet(planet);
 
-                planet.setPosition(new Vector2(GravityDemo1.WIDTH * coordx / 4, rocket.getPosition().y + 150));
+                planet.setPosition(new Vector2(GravityDemo1.WIDTH * coordx / 4, rocket.getPosition().y + 500+rad));
                 planet.setRadius(rad);
                 planet.setBounds();
                 planet.setMass(rad);
+                //planet.setOneOfModel(0);
+                planet.setNextModel();
 
+                planet.setCanGetPoints(true);
+                rocket.increasePoints(5);
+                Gdx.input.vibrate(500);
                 ps.setInitialized(false);
+                moon.reposition(planet);
+                downLimit = (int) (rocket.getPosition().y - (GravityDemo1.HEIGHT/2+150));
+
 
                 System.out.println("brojacPlaneta: "+brojacPlaneta);
                 System.out.println("coordx: "+coordx);
+                System.out.println("moon :"+ moon.getPosition().x + " "+moon.getPosition().y);
                 switch (coordx) {
                     case 1: coordx = 2; break;
                     case 2: {
@@ -287,9 +346,9 @@ public class PlayState extends State {
                 System.out.print("X POZICIJA NOVOG PLANETA: ");
                 System.out.println(planet.getPosition().x);
 
-                if (brojacPlaneta%3==0) {
+              /*  if (brojacPlaneta%3==0) {
                     moon = new Moon(new Vector2(planet.getPosition().x+150, planet.getPosition().y+50), new Vector2(-10, -17), new Vector2(0,0), 1);
-                }
+                }*/
 
                 planetCreationInProgress = false;
             }
@@ -330,6 +389,15 @@ public class PlayState extends State {
         sb.end();
     }
 
+    private void extraPoints(){
+        if (Intersector.intersectSegmentCircle(planet.getPosition(),moon.getPosition(),new Vector2(rocket.getBounds().x,rocket.getBounds().y),rocket.getBounds().radius)){
+            if (planet.canGetPoints()) {
+                Gdx.input.vibrate(500);
+                rocket.increasePoints(20);
+                planet.setCanGetPoints(false);
+            }
+        }
+    }
     @Override
     public void dispose() {
        rocket.dispose();
@@ -338,6 +406,7 @@ public class PlayState extends State {
        music.stop();
        music.dispose();
        ps.dispose();
-       Assets.newManager();
+      // Assets.newManager();
     }
+
 }
