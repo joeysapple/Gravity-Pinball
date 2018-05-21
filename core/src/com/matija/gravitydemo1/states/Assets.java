@@ -17,7 +17,7 @@ public class Assets {
 
     public static final String rocket = "rocketRight2.png";
     public static final String jupiter = "jupiter.png";
-    public static final String background = "space.jpg";
+    public static final String background = "space1.jpg";
     public static final String redBackground = "nebula15pink.png";
     public static final String sound = "rocketSound.mp3";
     public static final String textGen = "Comic_sans.ttf";
@@ -30,15 +30,15 @@ public class Assets {
     public static AssetManager manager = new AssetManager();
 
     public static FreeTypeFontGenerator fontGen;
-
+    public static boolean secondPartLoaded=false;
     private static ArrayList<String> earthStrings() {
         ArrayList<String> strings = new ArrayList<String>();
 
-        StringBuilder fileSB = new StringBuilder("earth/frame1");
+        StringBuilder fileSB = new StringBuilder("earth200_500/frame1");
         int index = fileSB.lastIndexOf("/");
         String path = fileSB.substring(0, index + 1);
 
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 200; i++) {
             StringBuilder sb = new StringBuilder(path);
             sb.append("frame (" + (i + 1) + ").png");
             strings.add(sb.toString());
@@ -51,11 +51,11 @@ public class Assets {
     private static ArrayList<String> weirdStrings() {
         ArrayList<String> strings = new ArrayList<String>();
 
-        StringBuilder fileSB = new StringBuilder("weirdPlanet/frame1");
+        StringBuilder fileSB = new StringBuilder("weirdPlanet200_500/frame1");
         int index = fileSB.lastIndexOf("/");
         String path = fileSB.substring(0, index + 1);
 
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 200; i++) {
             StringBuilder sb = new StringBuilder(path);
             sb.append("frame (" + (i + 1) + ").png");
             System.out.println(sb.toString());
@@ -96,6 +96,7 @@ public class Assets {
     public static void dispose(){
         manager.dispose();
         fontGen.dispose();
+        secondPartLoaded=false;
     }
 
 }

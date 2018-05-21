@@ -71,10 +71,15 @@ public class Moon implements Drawable,Movable {
     }
 
     public void reposition(Planet planet){
-        this.position.set(planet.getPosition().x+planet.getRadius()*2,planet.getPosition().y);
-        int velocity = (int)Math.sqrt(PlayState.G*planet.getMass()/(planet.getRadius()*2 ));
-
+        int distance = planet.getRadius()*2;
         this.radius = planet.getRadius()/4;
+
+        if (distance-planet.getRadius()-this.radius<60){
+            distance = 60+planet.getRadius()+this.radius;
+        }
+        this.position.set(planet.getPosition().x+distance,planet.getPosition().y);
+        int velocity = (int)Math.sqrt(PlayState.G*planet.getMass()/distance);
+
         this.velocity.set(0,-velocity);
         this.bounds.radius = radius;
     }

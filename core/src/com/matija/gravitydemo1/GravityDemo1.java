@@ -8,9 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.matija.gravitydemo1.states.Assets;
 import com.matija.gravitydemo1.states.GameStateManager;
-import com.matija.gravitydemo1.states.LoadingState;
-import com.matija.gravitydemo1.states.MenuState;
-import com.matija.gravitydemo1.states.PlayState;
+import com.matija.gravitydemo1.states.FirstLoadingState;
 
 public class GravityDemo1 extends ApplicationAdapter {
 
@@ -35,7 +33,7 @@ public class GravityDemo1 extends ApplicationAdapter {
 			System.out.println(s);
 		}
 		//TODO promjenit nazad u menu state
-		gsm.push(new LoadingState(gsm));
+		gsm.push(new FirstLoadingState(gsm));
 
 	}
 

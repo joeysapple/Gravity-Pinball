@@ -58,7 +58,8 @@ public class PlayState extends State {
 
     private ControlBoard controlBoard;
     private int downLimit = -GravityDemo1.HEIGHT/2-150;
-
+    private int leftLimitOffset =- 100;
+    private int rigthLimitOffset = 0;
   /*  private boolean initState = true;
     private BitmapFont font;
     private double currentMil;
@@ -105,18 +106,18 @@ public class PlayState extends State {
 
         //lijeva granica
         redBackgroundSpriteLeft = new Sprite(redBackground);
-        redBackgroundSpriteLeft.setSize(GravityDemo1.WIDTH,GravityDemo1.HEIGHT);
-        redBackgroundSpriteLeft.setCenter(-GravityDemo1.WIDTH/2,cam.position.y);
+        redBackgroundSpriteLeft.setSize(GravityDemo1.WIDTH+leftLimitOffset,GravityDemo1.HEIGHT);
+        redBackgroundSpriteLeft.setCenter(-GravityDemo1.WIDTH/2-leftLimitOffset/2,cam.position.y);
 
         //desna granica
         redBackgroundSpriteRight = new Sprite(redBackground);
-        redBackgroundSpriteRight.setSize(GravityDemo1.WIDTH,GravityDemo1.HEIGHT);
+        redBackgroundSpriteRight.setSize(GravityDemo1.WIDTH+rigthLimitOffset,GravityDemo1.HEIGHT);
         redBackgroundSpriteRight.setCenter(GravityDemo1.WIDTH + GravityDemo1.WIDTH/2,cam.position.y);
 
         //donja granica
         redBackgroundSpriteDown = new Sprite(redBackground);
-        redBackgroundSpriteDown.setSize(GravityDemo1.WIDTH,GravityDemo1.HEIGHT);
-        redBackgroundSpriteDown.setCenter(GravityDemo1.WIDTH/2 + GravityDemo1.WIDTH/2,downLimit);
+        redBackgroundSpriteDown.setSize(GravityDemo1.WIDTH+rigthLimitOffset-leftLimitOffset,GravityDemo1.HEIGHT);
+        redBackgroundSpriteDown.setCenter(GravityDemo1.WIDTH/2 + GravityDemo1.WIDTH/2-rigthLimitOffset+leftLimitOffset,downLimit);
 
      //   ps = new PositionSimulator(rocket,planet);
         ps = new PositionSimulator1();
@@ -160,7 +161,7 @@ public class PlayState extends State {
 
     @Override
     /**
-     * Metoda za upravljanje inputom. Ukoliko korisnik dotakne ekran, raketi se dodaje akceleracija udesno
+     * Metoda za upravljanje inputom
      */
     public void handleInput() {
         //Stari input, novi je u klasi ControlBoard
@@ -226,13 +227,13 @@ public class PlayState extends State {
         backroundSprite.setCenter(cam.position.x,cam.position.y);
         backroundSprite.draw(sb); //iscrtanjanje pozadine
 
-        redBackgroundSpriteLeft.setCenter(-GravityDemo1.WIDTH/2,cam.position.y);
+        redBackgroundSpriteLeft.setCenter(-GravityDemo1.WIDTH/2+leftLimitOffset/2,cam.position.y);
         redBackgroundSpriteLeft.draw(sb); //iscrtanjanje pozadine
 
-        redBackgroundSpriteRight.setCenter(GravityDemo1.WIDTH + GravityDemo1.WIDTH/2,cam.position.y);
+        redBackgroundSpriteRight.setCenter(GravityDemo1.WIDTH + GravityDemo1.WIDTH/2+rigthLimitOffset,cam.position.y);
         redBackgroundSpriteRight.draw(sb); //iscrtanjanje pozadine
 
-        redBackgroundSpriteDown.setCenter(GravityDemo1.WIDTH/2 ,downLimit);
+        redBackgroundSpriteDown.setCenter(GravityDemo1.WIDTH/2+(rigthLimitOffset+leftLimitOffset)/2 ,downLimit);
         redBackgroundSpriteDown.draw(sb);
 
         /*
@@ -244,6 +245,22 @@ public class PlayState extends State {
 
 
        rocket.draw(sb);
+
+       //iscrtavanje putanje
+        if (ps.getRockets().get(0).getBounds().overlaps(rocket.getBounds())){
+            //  noviKvadrat = true;
+        }
+        int index=0;
+
+        for (index=0;index<=ps.getIndex();index++){
+            Point r = ps.getRockets().get(index);
+            r.draw(sb);
+
+            if (planet.getBounds().overlaps(r.getBounds())) break;
+            // System.out.println("hah" + r.getPosition().x + " "+r.getPosition().y);
+
+        }
+
        moon.draw(sb);
         /*
         Iscrtavanje planeta
@@ -260,7 +277,7 @@ public class PlayState extends State {
         }
 
         //raketa je izvan granice
-        if (rocket.getPosition().x<0 || rocket.getPosition().x>GravityDemo1.WIDTH || rocket.getPosition().y<downLimit+GravityDemo1.HEIGHT/2){
+        if (rocket.getPosition().x<0+leftLimitOffset || rocket.getPosition().x>GravityDemo1.WIDTH+rigthLimitOffset || rocket.getPosition().y<downLimit+GravityDemo1.HEIGHT/2){
             dispose();
             gsm.set(new GameOverState(gsm,rocket.getPoints()));
         }
@@ -371,19 +388,7 @@ public class PlayState extends State {
         Iscrtavanje putanje
          */
 
-        if (ps.getRockets().get(0).getBounds().overlaps(rocket.getBounds())){
-            //  noviKvadrat = true;
-        }
-        int index=0;
 
-        for (index=0;index<=ps.getIndex();index++){
-            Point r = ps.getRockets().get(index);
-            r.draw(sb);
-
-            if (planet.getBounds().overlaps(r.getBounds())) break;
-            // System.out.println("hah" + r.getPosition().x + " "+r.getPosition().y);
-
-        }
 
 
 

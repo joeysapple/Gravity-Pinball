@@ -50,10 +50,10 @@ public class Planet implements Drawable{
         this.acceleration = new Vector2(acceleration.x,acceleration.y);
         this.mass = mass;
        // model = new SpriteGraphicsModel("earth.gif");
-        model = new GifGraphicsModel("weirdPlanet/frame (1).png",50);
+        model = new GifGraphicsModel("weirdPlanet200_500/frame (1).png",200);
         models.add(model);
 
-        model = new GifGraphicsModel("earth/frame (1).png",50);
+        model = new GifGraphicsModel("earth200_500/frame (1).png",200);
         models.add(model);
         //model = new GifGraphicsModel("jupiter2/frame_00.gif", 54);
         this.radius = radius;

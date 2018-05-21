@@ -1,40 +1,31 @@
 package com.matija.gravitydemo1.states;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.assets.loaders.FileHandleResolver;
-import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
-import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.matija.gravitydemo1.GravityDemo1;
 
 /**
- * Created by Korisnik on 28.4.2018..
+ * Created by Korisnik on 21.5.2018..
  */
 
-public class LoadingState extends State {
+public abstract class LoadingState extends State {
 
-    private boolean loading = false;
-    private BitmapFont font = new BitmapFont();
-    private ProgressBar pb;
-    private Sprite backroundSprite;
-    private Texture background;
-    private Pixmap loadingBarBackground;
-    private Pixmap loadingBar;
-    private Texture t;
-    private float progress;
-    private com.matija.gravitydemo1.states.ProgressBar progressBar;
+    protected boolean loading = false;
+    protected BitmapFont font = new BitmapFont();
+    protected com.badlogic.gdx.scenes.scene2d.ui.ProgressBar pb;
+    protected Sprite backroundSprite;
+    protected Texture background;
+    protected Pixmap loadingBarBackground;
+    protected Pixmap loadingBar;
+    protected Texture t;
+    protected float progress;
+    protected com.matija.gravitydemo1.states.ProgressBar progressBar;
     /**
      * Konstruktor
      *
@@ -42,69 +33,38 @@ public class LoadingState extends State {
      */
     public LoadingState(GameStateManager gsm) {
         super(gsm);
-        Assets.newManager();
+       // Assets.newManager();
         cam.setToOrtho(false, GravityDemo1.WIDTH/2,GravityDemo1.HEIGHT/2);
         progressBar = new com.matija.gravitydemo1.states.ProgressBar(new Vector2(50,200),150);
 
         t = new Texture(Gdx.files.internal("dot.jpg"));
         background = new Texture(Gdx.files.internal("space.jpg"));
+
         background.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         backroundSprite = new Sprite(background);
 
-        loadingBarBackground = new Pixmap(100, 20, Pixmap.Format.RGBA8888);
-        loadingBarBackground.setColor(Color.GREEN);
-        loadingBarBackground.fill();
 
-        TextureRegionDrawable drawable = new TextureRegionDrawable(new TextureRegion(new Texture(loadingBarBackground)));
-
-        ProgressBar.ProgressBarStyle progressBarStyle = new ProgressBar.ProgressBarStyle();
-        progressBarStyle.background = drawable;
-        loadingBarBackground.dispose();
-
-
-        Pixmap pixmap1 = new Pixmap(0, 20, Pixmap.Format.RGBA8888);
-        pixmap1.setColor(Color.GREEN);
-        pixmap1.fill();
-        drawable = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap1)));
-
-        progressBarStyle.knob=new TextureRegionDrawable(new TextureRegion(new Texture(pixmap1)));
-        pixmap1.dispose();
-
-        Pixmap pixmap2 = new Pixmap(100, 20, Pixmap.Format.RGBA8888);
-        pixmap2.setColor(Color.GREEN);
-        pixmap2.fill();
-        drawable = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap2)));
-
-
-        progressBarStyle.knobBefore = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap2)));
-        pixmap2.dispose();
-
-        pb = new ProgressBar(0.0f,1.0f, (float) 0.01,false,progressBarStyle);
-        pb.setAnimateDuration(0.25f);
-        pb.setBounds(50,50,100,20);
-        pb.setValue(0.5f);
-
-        load();
+      //  load();
     }
 
     @Override
-    public void handleInput() {
+    public final void handleInput() {
 
     }
 
     @Override
-    public void update(float dt) {
-      if(Assets.manager.update() && progress>=1.0f){
-          this.dispose();
-          gsm.set(new MenuState(gsm));
-      }
+    public final void update(float dt) {
+        if(Assets.manager.update() && progress>=1.0f){
+            this.dispose();
+            this.nextState();
+        }
 
     }
 
     @Override
-    public void render(SpriteBatch sb) {
+    public final void render(SpriteBatch sb) {
         progress = Assets.manager.getProgress();
-     //   System.out.println(progress);
+        //   System.out.println(progress);
 
         sb.setProjectionMatrix(cam.combined);
         sb.begin();
@@ -124,40 +84,14 @@ public class LoadingState extends State {
     }
 
     @Override
-    public void dispose() {
+    public final void dispose() {
         background.dispose();
-        t.dispose();
         progressBar.dispose();
 
     }
 
-    private void load(){
-        Assets.manager.load(Assets.rocket,Texture.class);
-        Assets.manager.load(Assets.jupiter,Texture.class);
-        Assets.manager.load("sphere.png",Texture.class);
-        Assets.manager.load(Assets.background,Texture.class);
-        Assets.manager.load(Assets.redBackground,Texture.class);
-        Assets.manager.load(Assets.sound, Music.class);
+    protected abstract void load();
 
-       /* FileHandleResolver resolver = new InternalFileHandleResolver();
-        Assets.manager.setLoader(FreeTypeFontGenerator.class, new FreeTypeFontGeneratorLoader(resolver));
-        Assets.manager.setLoader(BitmapFont.class, ".TTF", new FreetypeFontLoader(resolver));*/
+    protected abstract void nextState();
 
-      //  Assets.manager.load(Assets.textGen, BitmapFont.class);
-
-        Assets.manager.load(Assets.touchpadBg,Texture.class);
-        Assets.manager.load(Assets.touchKnob, Texture.class);
-        Assets.loadFont();
-        for (int i=0;i<50;i++){
-            Assets.manager.load(Assets.earth.get(i),Texture.class);
-        }
-
-        for (int i=0;i<50;i++){
-            Assets.manager.load(Assets.weirdPlanet.get(i),Texture.class);
-        }
-
-        for (int i=0;i<50;i++){
-            Assets.manager.load(Assets.moon.get(i),Texture.class);
-        }
-    }
 }

@@ -58,7 +58,7 @@ public class GifGraphicsModel extends GraphicsModel {
         counter+=(currentM - currentMil);
         currentMil = currentM;
 
-        if (counter>75){
+        if (counter>30){
             counter = 0;
             current++;
             current = current%this.size;
