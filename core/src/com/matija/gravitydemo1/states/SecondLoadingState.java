@@ -13,9 +13,12 @@ public class SecondLoadingState extends LoadingState {
      *
      * @param gsm Upravljač stanjima
      */
-    public SecondLoadingState(GameStateManager gsm) {
+    private boolean launch;
+
+    public SecondLoadingState(GameStateManager gsm, boolean launch) {
         super(gsm);
         this.load();
+        this.launch=launch;
     }
 
     @Override
@@ -33,6 +36,12 @@ public class SecondLoadingState extends LoadingState {
 
     @Override
     protected void nextState() {
-        gsm.set(new RocketDisassembligState(gsm));
+
+        if (launch){
+            gsm.set(new RocketDisassembligState(gsm));
+        }
+        else{
+            gsm.set(new PlayState(gsm));
+        }
     }
 }

@@ -15,8 +15,8 @@ import com.badlogic.gdx.math.Rectangle;
 public class MenuState extends State{
     private Texture background;
     private Texture title;
-    private Texture playBtn, hsBtn, helpBtn, exitBtn;
-    private Rectangle boundPlay, boundHigh, boundHelp, boundExit;
+    private Texture playBtn, playSpaceBtn, hsBtn, helpBtn, exitBtn;
+    private Rectangle boundPlay, boundSpace, boundHigh, boundHelp, boundExit;
     public MenuState(GameStateManager gsm) {
         super(gsm);
         //za mob
@@ -25,6 +25,7 @@ public class MenuState extends State{
         title = new Texture("menu2.png");
         background = new Texture("background.png");
         playBtn = new Texture("button_play.png");
+        playSpaceBtn = new Texture("button_space.png");
         hsBtn = new Texture("button_highscore.png");
         helpBtn = new Texture("button_help.png");
         exitBtn = new Texture("button_exit.png");
@@ -38,9 +39,10 @@ public class MenuState extends State{
         exitBtn.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
         boundPlay=new Rectangle(cam.position.x - playBtn.getWidth() / 2, cam.position.y*1.25f,playBtn.getWidth(),playBtn.getHeight());
-        boundHigh=new Rectangle(cam.position.x - hsBtn.getWidth() / 2, cam.position.y*1f,hsBtn.getWidth(),hsBtn.getHeight());
-        boundHelp=new Rectangle(cam.position.x - helpBtn.getWidth() / 2, cam.position.y*0.75f,helpBtn.getWidth(),helpBtn.getHeight());
-        boundExit=new Rectangle(cam.position.x - exitBtn.getWidth() / 2, cam.position.y*0.5f,exitBtn.getWidth(),exitBtn.getHeight());
+        boundSpace=new Rectangle(cam.position.x - playSpaceBtn.getWidth() / 2, cam.position.y*1f,playSpaceBtn.getWidth(),playSpaceBtn.getHeight());
+        boundHigh=new Rectangle(cam.position.x - hsBtn.getWidth() / 2, cam.position.y*0.75f,hsBtn.getWidth(),hsBtn.getHeight());
+        boundHelp=new Rectangle(cam.position.x - helpBtn.getWidth() / 2, cam.position.y*0.5f,helpBtn.getWidth(),helpBtn.getHeight());
+        boundExit=new Rectangle(cam.position.x - exitBtn.getWidth() / 2, cam.position.y*0.25f,exitBtn.getWidth(),exitBtn.getHeight());
 
     }
 
@@ -55,10 +57,19 @@ public class MenuState extends State{
             if(boundPlay.contains(tmp.x,tmp.y)) {
                 if (Assets.secondPartLoaded==false){
                     Assets.secondPartLoaded=true;
-                    gsm.set(new SecondLoadingState(gsm));
+                    gsm.set(new SecondLoadingState(gsm, true));
                 }
                 else {
                     gsm.set(new RocketDisassembligState(gsm));
+                }
+            }
+            if(boundSpace.contains(tmp.x,tmp.y)) {
+                if (Assets.secondPartLoaded==false){
+                    Assets.secondPartLoaded=true;
+                    gsm.set(new SecondLoadingState(gsm, false));
+                }
+                else {
+                    gsm.set(new PlayState(gsm));
                 }
             }
             if(boundHelp.contains(tmp.x,tmp.y)) {
@@ -87,9 +98,10 @@ public class MenuState extends State{
         sb.draw(background, 0,0, Menus.WIDTH/2, Menus.HEIGHT /2);
         sb.draw(title, cam.position.x +7 - title.getWidth() / 2, cam.position.y*2f - title.getHeight()*1.1f);
         sb.draw(playBtn, cam.position.x - playBtn.getWidth() / 2, cam.position.y*1.25f);
-        sb.draw(hsBtn, cam.position.x - hsBtn.getWidth() / 2, cam.position.y*1f);
-        sb.draw(helpBtn, cam.position.x - helpBtn.getWidth() / 2, cam.position.y*0.75f);
-        sb.draw(exitBtn, cam.position.x - exitBtn.getWidth() / 2, cam.position.y*0.5f);
+        sb.draw(playSpaceBtn, cam.position.x - playSpaceBtn.getWidth() / 2, cam.position.y*1f);
+        sb.draw(hsBtn, cam.position.x - hsBtn.getWidth() / 2, cam.position.y*0.75f);
+        sb.draw(helpBtn, cam.position.x - helpBtn.getWidth() / 2, cam.position.y*0.5f);
+        sb.draw(exitBtn, cam.position.x - exitBtn.getWidth() / 2, cam.position.y*0.25f);
 
         sb.end();
     }
