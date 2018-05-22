@@ -41,6 +41,12 @@ public class HelpState extends State{
         background = new Texture("background.png");
         title = new Texture("help.png");
         backBtn = new Texture("button_back.png");
+
+        //Smooth
+        background.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        title.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        backBtn.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+
         boundBack=new Rectangle(cam.position.x - backBtn.getWidth() / 2, cam.position.y*0.15f,backBtn.getWidth(),backBtn.getHeight());
 
         parameter.size=15;
@@ -48,6 +54,8 @@ public class HelpState extends State{
         parameter.borderColor= Color.BLACK;
         parameter.borderWidth = 1;
         font = fontGen.generateFont(parameter);
+
+        font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         fontGen.dispose();
     }
 
@@ -89,6 +97,7 @@ public class HelpState extends State{
         background.dispose();
         backBtn.dispose();
         title.dispose();
+        font.dispose();
 
     }
 }
