@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -87,7 +88,12 @@ public class FirstLoadingState extends LoadingState {
         Assets.manager.load("sphere.png",Texture.class);
         Assets.manager.load(Assets.background,Texture.class);
         Assets.manager.load(Assets.redBackground,Texture.class);
+
         Assets.manager.load(Assets.sound, Music.class);
+        Assets.manager.load(Assets.crash, Sound.class);
+        Assets.manager.load(Assets.scoreUp,Sound.class);
+        Assets.manager.load(Assets.success,Sound.class);
+        Assets.manager.load(Assets.explosion,Sound.class);
 
        /* FileHandleResolver resolver = new InternalFileHandleResolver();
         Assets.manager.setLoader(FreeTypeFontGenerator.class, new FreeTypeFontGeneratorLoader(resolver));

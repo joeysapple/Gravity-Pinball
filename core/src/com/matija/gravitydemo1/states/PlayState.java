@@ -3,6 +3,7 @@ package com.matija.gravitydemo1.states;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -45,7 +46,12 @@ public class PlayState extends State {
     private Sprite redBackgroundSpriteLeft;
     private Sprite redBackgroundSpriteRight;
     private Sprite redBackgroundSpriteDown;
+
     private Music music;
+    private Sound crashingSound;
+    private Sound scoreUpSound;
+    private Sound successSound;
+
     public boolean potisak = true;
     public final static Vector2 otherCirclePos = new Vector2(GravityDemo1.WIDTH/4,250);
     public final static double G = 1000.0f;
@@ -134,8 +140,12 @@ public class PlayState extends State {
         music = Assets.manager.get(Assets.sound,Music.class);
 
         music.setLooping(true);
-        music.setVolume(0.90f);
+        music.setVolume(1.0f);
         music.play();
+
+        crashingSound = Assets.manager.get(Assets.crash,Sound.class);
+        scoreUpSound = Assets.manager.get(Assets.scoreUp,Sound.class);
+        successSound = Assets.manager.get(Assets.success,Sound.class);
 
         /*
         Inicijalizacija kontrolne ploce
@@ -272,12 +282,14 @@ public class PlayState extends State {
          */
         if (planet.getBounds().overlaps(rocket.getBounds()) || moon.getBounds().overlaps(rocket.getBounds())){
            // System.out.println("preklapanje");
+            crashingSound.play();
             dispose();
             gsm.set(new GameOverState(gsm,rocket.getPoints(), false));
         }
 
         //raketa je izvan granice
         if (rocket.getPosition().x<0+leftLimitOffset || rocket.getPosition().x>GravityDemo1.WIDTH+rigthLimitOffset || rocket.getPosition().y<downLimit+GravityDemo1.HEIGHT/2){
+            crashingSound.play();
             dispose();
             gsm.set(new GameOverState(gsm,rocket.getPoints(), false));
         }
@@ -329,6 +341,7 @@ public class PlayState extends State {
                         else { WORMHOLE } (zasad placeholder zaustavi igru)
                     */
                     dispose();
+                    successSound.play(0.5f);
                     gsm.set(new GameOverState(gsm,rocket.getPoints(), true));
                 }
 
@@ -349,6 +362,8 @@ public class PlayState extends State {
 
                 planet.setCanGetPoints(true);
                 rocket.increasePoints(5);
+
+                scoreUpSound.play(0.6f);
                 Gdx.input.vibrate(500);
                 ps.setInitialized(false);
                 moon.reposition(planet);
@@ -413,6 +428,7 @@ public class PlayState extends State {
     private void extraPoints(){
         if (Intersector.intersectSegmentCircle(planet.getPosition(),moon.getPosition(),new Vector2(rocket.getBounds().x,rocket.getBounds().y),rocket.getBounds().radius)){
             if (planet.canGetPoints()) {
+                scoreUpSound.play(0.6f);
                 Gdx.input.vibrate(500);
                 rocket.increasePoints(20);
                 planet.setCanGetPoints(false);

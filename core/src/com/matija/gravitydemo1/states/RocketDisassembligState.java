@@ -1,6 +1,8 @@
 package com.matija.gravitydemo1.states;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -32,6 +34,14 @@ public class RocketDisassembligState extends State{
     private float startingPosition;
     private int brojSlike = 0;
     private int jacinaMlaza = 0;
+
+    private Sound successSound;
+    private Sound explosionSound;
+    private Music music;
+
+    private boolean explosionPlayed = false;
+    private boolean musicStopped = false;
+
     private boolean lastPart = false;
     private Part[] parts = {new Part(0,0),new Part(0,0),new Part(0,0),new Part(0,0)};
     private Part part;
@@ -100,6 +110,13 @@ public class RocketDisassembligState extends State{
     public RocketDisassembligState(GameStateManager gsm) {
         super(gsm);
 
+        successSound = Assets.manager.get(Assets.success,Sound.class);
+        explosionSound = Assets.manager.get(Assets.explosion,Sound.class);
+        music = Assets.manager.get(Assets.sound,Music.class);
+
+        music.setLooping(true);
+        music.setVolume(1.0f);
+        music.play();
 
         background = new DisassemblingBackground(0,0);
         System.out.println("visina:" + (int) Math.round(background.getBackground().getHeight()/1.7));
@@ -141,6 +158,7 @@ public class RocketDisassembligState extends State{
                     transporter.setThrust(5);
                     background.setThrust(1);
                     success = true;
+                    successSound.play(0.5f);
                 }
             }
             else if(boundGas.contains(tmp.x,tmp.y) && !enableReleaseBtn) {
@@ -186,7 +204,17 @@ public class RocketDisassembligState extends State{
             background.setPosition(new Vector2(0, 0));
            // background.dispose();
             transporter.setTexture(new Texture("LukinAsset/explosion4.png"));
+            if (!musicStopped){
+                musicStopped=true;
+                music.stop();
+            }
             crushed = true;
+            if (!explosionPlayed){
+                explosionSound.play(0.5f);
+
+                explosionPlayed=true;
+            }
+
             //cam.setToOrtho(false, background.getBackground().getWidth(), background.getBackground().getHeight() / 1);
         }
 
@@ -218,12 +246,14 @@ public class RocketDisassembligState extends State{
             partNumber = 3;
             enableReleaseBtn = true;
             lastPart = true;
+
         }
 
         if(background.getPosition().y < -3850 && background.getPosition().y > -3900 && false){
             transporter.setThrust(5);
             background.setThrust(1);
             success = true;
+
         }
 
 
@@ -283,6 +313,11 @@ public class RocketDisassembligState extends State{
     public void dispose() {
         background.dispose();
         transporter.dispose();
+     /*   if (!musicStopped){
+            musicStopped=true;
+            music.stop();
+        }*/
+
 
     }
 

@@ -2,6 +2,7 @@ package com.matija.gravitydemo1.states;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.matija.gravitydemo1.sprites.ControlBoard;
 
@@ -19,7 +20,13 @@ public class Assets {
     public static final String jupiter = "jupiter.png";
     public static final String background = "space1.jpg";
     public static final String redBackground = "nebula15pink.png";
+
     public static final String sound = "rocketSound.mp3";
+    public static final String crash = "crash.mp3";
+    public static final String scoreUp = "scoreUp.mp3";
+    public static final String success = "success.mp3";
+    public static final String explosion = "explosion.mp3";
+
     public static final String textGen = "Comic_sans.ttf";
     public static final String touchpadBg = "touchpadBg.png";
     public static final String touchKnob = "touchKnob.png";

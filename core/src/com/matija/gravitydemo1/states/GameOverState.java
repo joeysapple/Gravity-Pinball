@@ -64,6 +64,7 @@ public class GameOverState extends State{
 
 
         //Smooth
+        title.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         background.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         menuBtn.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         highBtn.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
