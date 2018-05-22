@@ -41,6 +41,7 @@ public class Part implements Drawable,Movable {
 
     public void setTexture(Texture transporter) {
         this.transporter = transporter;
+        this.transporter.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
     }
 
     @Override

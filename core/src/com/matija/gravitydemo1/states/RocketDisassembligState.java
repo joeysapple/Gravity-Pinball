@@ -89,8 +89,8 @@ public class RocketDisassembligState extends State{
 
     private int partNumber = 0;
     private boolean success = false;
-    private Texture gasButton = new Texture("LukinAsset/button_gas.png");
-    private Texture releaseButton = new Texture("LukinAsset/button_release.png");
+    private Texture gasButton;
+    private Texture releaseButton;
     private boolean enableReleaseBtn;
 
     private Rectangle boundGas, boundRelease;
@@ -102,6 +102,13 @@ public class RocketDisassembligState extends State{
 
 
         background = new DisassemblingBackground(0,0);
+
+        gasButton = new Texture("LukinAsset/button_gas.png");
+        releaseButton = new Texture("LukinAsset/button_release.png");
+
+        gasButton.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        releaseButton.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+
         System.out.println("visina:" + (int) Math.round(background.getBackground().getHeight()/1.7));
         transporter = transporters[0][0];
         cam.setToOrtho(false, background.getBackground().getWidth(),1150);

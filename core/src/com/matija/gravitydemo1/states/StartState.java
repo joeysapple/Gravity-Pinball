@@ -16,7 +16,7 @@ import com.matija.gravitydemo1.states.Menus;
 
 public class StartState extends State{
     private Texture background;
-    private BitmapFont font = new BitmapFont();
+    private BitmapFont font;
 
 
     public StartState(GameStateManager gsm) {
@@ -24,6 +24,12 @@ public class StartState extends State{
         //za mob
         cam.setToOrtho(false, Menus.WIDTH/2, Menus.HEIGHT /2 );
         background = new Texture("font_ver1.png");
+
+        font = new BitmapFont();
+
+        //Smooth
+        background.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
     }
 
     @Override
@@ -58,6 +64,6 @@ public class StartState extends State{
     @Override
     public void dispose() {
         background.dispose();
-
+        font.dispose();
     }
 }
