@@ -57,7 +57,7 @@ public class PlayState extends State {
     private Label debug;
 
     private ControlBoard controlBoard;
-    private int downLimit = -GravityDemo1.HEIGHT/2-150;
+    private int downLimit = -GravityDemo1.HEIGHT/2-175;
     private int leftLimitOffset =- 100;
     private int rigthLimitOffset = 0;
   /*  private boolean initState = true;
@@ -84,8 +84,8 @@ public class PlayState extends State {
         /*
         Instanciranje rakete i planeta
          */
-        rocket = new Rocket(new Vector2(GravityDemo1.WIDTH/2,0),new Vector2((float) 10,0),new Vector2(0,0),1);
-        planet = new Planet(new Vector2(GravityDemo1.WIDTH/2,250),new Vector2(0,0),new Vector2(0,0),60,60);
+        rocket = new Rocket(new Vector2(GravityDemo1.WIDTH/2+leftLimitOffset/2,-40),new Vector2( 0,0),new Vector2(0,0),1);
+        planet = new Planet(new Vector2(GravityDemo1.WIDTH/2+leftLimitOffset/2,250),new Vector2(0,0),new Vector2(0,0),60,60);
         moon = new Moon(new Vector2(400,400),new Vector2(-10,-17),new Vector2(0,0),1);
         moon.reposition(planet);
         //za beskonacnu verziju: boolean ascOrDesc = true;
