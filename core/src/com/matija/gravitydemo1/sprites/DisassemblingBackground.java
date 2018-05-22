@@ -24,6 +24,7 @@ public class DisassemblingBackground implements Drawable,Movable {
         this.position = new Vector2( x, y);
         this.velocity = new Vector2(0 ,0);
         this.background = new Texture("LukinAsset/background5.png");
+        background.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         thrust = 0;
 
     }

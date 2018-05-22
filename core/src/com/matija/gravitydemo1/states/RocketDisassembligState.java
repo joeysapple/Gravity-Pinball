@@ -119,6 +119,7 @@ public class RocketDisassembligState extends State{
         music.play();
 
         background = new DisassemblingBackground(0,0);
+
         System.out.println("visina:" + (int) Math.round(background.getBackground().getHeight()/1.7));
         transporter = transporters[0][0];
         cam.setToOrtho(false, background.getBackground().getWidth(),1150);
@@ -317,6 +318,8 @@ public class RocketDisassembligState extends State{
     public void dispose() {
         background.dispose();
         transporter.dispose();
+        releaseButton.dispose();
+        gasButton.dispose();
      /*   if (!musicStopped){
             musicStopped=true;
             music.stop();

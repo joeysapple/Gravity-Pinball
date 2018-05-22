@@ -18,6 +18,7 @@ public class RocketTransporter implements Drawable,Movable {
         this.position = new Vector2( x, y);
         this.velocity = new Vector2(0 ,0);
         this.transporter = new Texture("LukinAsset/transporter11.png");
+        transporter.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         thrust = 0;
     }
 
@@ -41,7 +42,9 @@ public class RocketTransporter implements Drawable,Movable {
     }
 
     public void setTexture(Texture transporter) {
+
         this.transporter = transporter;
+        transporter.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
     }
 
     @Override
