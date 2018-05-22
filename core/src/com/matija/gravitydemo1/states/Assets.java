@@ -26,10 +26,16 @@ public class Assets {
     public static final String scoreUp = "scoreUp.mp3";
     public static final String success = "success.mp3";
     public static final String explosion = "explosion.mp3";
+    public static final String timerTick = "timerTick.mp3";
+    public static final String timerGo = "timerGo.mp3";
 
     public static final String textGen = "Comic_sans.ttf";
     public static final String touchpadBg = "touchpadBg.png";
     public static final String touchKnob = "touchKnob.png";
+
+    public static final String digit3 = "digit3.png";
+    public static final String digit2 = "digit2.png";
+    public static final String digit1 = "digit1.png";
 
     public static final List<String> earth = earthStrings();
     public static final List<String> weirdPlanet = weirdStrings();

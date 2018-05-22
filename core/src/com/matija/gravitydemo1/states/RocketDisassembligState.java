@@ -223,6 +223,7 @@ public class RocketDisassembligState extends State{
             brojSlike = 1;
             part = parts[0];
             enableReleaseBtn = true;
+            Gdx.input.vibrate(100);
         }
         if(background.getPosition().y < -1200  && notGonnaFall && part.isReleased())
             part = parts[1];
@@ -230,6 +231,7 @@ public class RocketDisassembligState extends State{
             brojSlike = 2;
             partNumber = 1;
             enableReleaseBtn = true;
+            Gdx.input.vibrate(100);
         }
         if(background.getPosition().y < -2000  && notGonnaFall && part.isReleased())
             part = parts[2];
@@ -237,6 +239,7 @@ public class RocketDisassembligState extends State{
             brojSlike = 3;
             partNumber = 2;
             enableReleaseBtn = true;
+            Gdx.input.vibrate(100);
         }
 
         if(background.getPosition().y < -2900  && notGonnaFall && part.isReleased())
@@ -246,6 +249,7 @@ public class RocketDisassembligState extends State{
             partNumber = 3;
             enableReleaseBtn = true;
             lastPart = true;
+            Gdx.input.vibrate(100);
 
         }
 

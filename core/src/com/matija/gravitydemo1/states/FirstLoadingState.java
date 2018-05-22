@@ -94,6 +94,12 @@ public class FirstLoadingState extends LoadingState {
         Assets.manager.load(Assets.scoreUp,Sound.class);
         Assets.manager.load(Assets.success,Sound.class);
         Assets.manager.load(Assets.explosion,Sound.class);
+        Assets.manager.load(Assets.timerTick,Sound.class);
+        Assets.manager.load(Assets.timerGo,Sound.class);
+
+        Assets.manager.load(Assets.digit3,Texture.class);
+        Assets.manager.load(Assets.digit2,Texture.class);
+        Assets.manager.load(Assets.digit1,Texture.class);
 
        /* FileHandleResolver resolver = new InternalFileHandleResolver();
         Assets.manager.setLoader(FreeTypeFontGenerator.class, new FreeTypeFontGeneratorLoader(resolver));

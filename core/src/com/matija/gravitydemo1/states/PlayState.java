@@ -24,6 +24,9 @@ import com.matija.gravitydemo1.sprites.Rocket;
 import com.matija.gravitydemo1.sprites.Planet;
 import com.matija.gravitydemo1.sprites.ControlBoard;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by Korisnik on 23.3.2018..
  */
@@ -51,6 +54,8 @@ public class PlayState extends State {
     private Sound crashingSound;
     private Sound scoreUpSound;
     private Sound successSound;
+    private Sound timerTickSound;
+    private Sound timerGoSound;
 
     public boolean potisak = true;
     public final static Vector2 otherCirclePos = new Vector2(GravityDemo1.WIDTH/4,250);
@@ -66,11 +71,20 @@ public class PlayState extends State {
     private int downLimit = -GravityDemo1.HEIGHT/2-150;
     private int leftLimitOffset =- 100;
     private int rigthLimitOffset = 0;
-  /*  private boolean initState = true;
-    private BitmapFont font;
+
+    //za counter
+ /*   private boolean initState;
+    private int timeCounter;
+    private int currentMil;*/
+
+    private boolean initState = true;
+
     private double currentMil;
     private double timeCounter;
-    private int currentSec;*/
+    private int currentSec;
+
+    private Map<Integer,Sprite> timerDigits;
+
     /**
      * Konstruktor
      * @param gsm gsm
@@ -90,7 +104,10 @@ public class PlayState extends State {
         /*
         Instanciranje rakete i planeta
          */
-        rocket = new Rocket(new Vector2(GravityDemo1.WIDTH/2,0),new Vector2((float) 10,0),new Vector2(0,0),1);
+        rocket = new Rocket(new Vector2(GravityDemo1.WIDTH/2,0),new Vector2(0,0),new Vector2(0,0),1);
+
+        //inicijalna rotacija rakete
+
         planet = new Planet(new Vector2(GravityDemo1.WIDTH/2,250),new Vector2(0,0),new Vector2(0,0),60,60);
         moon = new Moon(new Vector2(400,400),new Vector2(-10,-17),new Vector2(0,0),1);
         moon.reposition(planet);
@@ -98,6 +115,7 @@ public class PlayState extends State {
         brojacPlaneta = 1;
         coordx = 2;
         planetCreationInProgress = false;
+        initState = true;
 
         /*
         Inicijalizacija pozadine
@@ -146,7 +164,8 @@ public class PlayState extends State {
         crashingSound = Assets.manager.get(Assets.crash,Sound.class);
         scoreUpSound = Assets.manager.get(Assets.scoreUp,Sound.class);
         successSound = Assets.manager.get(Assets.success,Sound.class);
-
+        timerTickSound = Assets.manager.get(Assets.timerTick,Sound.class);
+        timerGoSound = Assets.manager.get(Assets.timerGo,Sound.class);
         /*
         Inicijalizacija kontrolne ploce
          */
@@ -162,10 +181,15 @@ public class PlayState extends State {
         font.setColor(Color.GOLD);
         font.getData().setScale(2.8f);
         font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+       */
 
         currentMil = System.currentTimeMillis();
         timeCounter = 0;
-        currentSec = 3;*/
+        currentSec = 4;
+        timerDigitsInit();
+
+      //  ms.move(rocket,planet,0.01f);
+        rocket.getVelocity().y=0.000001f;
     }
 
 
@@ -196,7 +220,10 @@ public class PlayState extends State {
     @Override
     public void update(float dt) {
         //handleInput();  //provjerava se input
-      /*  if (initState) {initState();}*/
+
+       if (initState) {
+            initState();
+        }
 
         float x = rocket.getPosition().x;
         float y = rocket.getPosition().y;   //dohvaća se trenutna pozicija rakete
@@ -204,8 +231,11 @@ public class PlayState extends State {
 
 
     //    rocket.update(dt,planet);   //ažuriraju se parametri rakete
-        ms.move(rocket, planet,dt);
-        ms.move(moon, planet,dt);
+
+        if (!initState) {
+            ms.move(rocket, planet, dt);
+            ms.move(moon, planet, dt);
+        }
 
         rocket.getBounds().setPosition(rocket.getPosition().x,rocket.getPosition().y);
         moon.setBounds();
@@ -233,7 +263,7 @@ public class PlayState extends State {
 
 
 
-        //cam.zoom = 5.0f;
+     //   cam.zoom = 2.0f;
         backroundSprite.setCenter(cam.position.x,cam.position.y);
         backroundSprite.draw(sb); //iscrtanjanje pozadine
 
@@ -277,7 +307,18 @@ public class PlayState extends State {
          */
         planet.draw(sb);
 
+
+        if (initState && currentSec<4 && currentSec>0){
+
+
+            timerDigits.get(currentSec).setCenter(GravityDemo1.WIDTH/2,GravityDemo1.HEIGHT/2);
+            timerDigits.get(currentSec).draw(sb);
+
+        }
+
         /*
+
+
         Provjera je li došlo do sudara. Ukoliko jest, igra završava
          */
         if (planet.getBounds().overlaps(rocket.getBounds()) || moon.getBounds().overlaps(rocket.getBounds())){
@@ -417,11 +458,14 @@ public class PlayState extends State {
          */
 
 
+
+
         controlBoard.render();
 
       /*  if (initState){
             font.draw(sb,currentSec+"",GravityDemo1.WIDTH/2,GravityDemo1.HEIGHT/2);
         }*/
+
         sb.end();
     }
 
@@ -447,19 +491,61 @@ public class PlayState extends State {
       // Assets.newManager();
     }
 
-  /*  private void initState(){
+    private void initState(){
         double currentM = System.currentTimeMillis();
         timeCounter+=(currentM - currentMil);
         currentMil = currentM;
 
         if (timeCounter>1000){
             timeCounter=0;
+            System.out.println(currentSec);
             currentSec--;
             if (currentSec==0){
                 initState=false;
+                timerGoSound.play();
+            }
+            else if (timeCounter<4){
+                timerTickSound.play();
+
             }
         }
 
-    }*/
+    }
+
+    private void timerDigitsInit(){
+
+        timerDigits = new HashMap<Integer, Sprite>();
+
+        //3
+        Texture digit3 = Assets.manager.get(Assets.digit3,Texture.class);
+        digit3.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+
+        Sprite sprite3 = new Sprite(digit3);
+      //  sprite3.scale(0.5f);
+        sprite3.setCenter(GravityDemo1.WIDTH/2,GravityDemo1.HEIGHT/2);
+
+        timerDigits.put(3,sprite3);
+
+        //2
+        Texture digit2 = Assets.manager.get(Assets.digit2,Texture.class);
+        digit2.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+
+        Sprite sprite2 = new Sprite(digit2);
+     //   sprite2.scale(0.5f);
+        sprite2.setCenter(GravityDemo1.WIDTH/2,GravityDemo1.HEIGHT/2);
+
+        timerDigits.put(2,sprite2);
+
+        //1
+        Texture digit1 = Assets.manager.get(Assets.digit1,Texture.class);
+        digit2.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+
+        Sprite sprite1 = new Sprite(digit1);
+
+        sprite1.setCenter(GravityDemo1.WIDTH/2,GravityDemo1.HEIGHT/2);
+
+        timerDigits.put(1,sprite1);
+
+    }
 
 }

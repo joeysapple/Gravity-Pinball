@@ -1,5 +1,7 @@
 package com.matija.gravitydemo1.sprites;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
@@ -90,5 +92,9 @@ public class Moon implements Drawable,Movable {
 
     public Circle getBounds(){
         return this.bounds;
+    }
+
+    public Texture getModel(){
+        return this.model.texture;
     }
 }
