@@ -203,6 +203,8 @@ public class ControlBoard implements ApplicationListener{
 
         sredina.center();
         sredina.add(touchpad);
+        sredina.row();
+        sredina.padBottom(10);
 
         gornja.top();
         //table.left();

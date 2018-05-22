@@ -273,13 +273,13 @@ public class PlayState extends State {
         if (planet.getBounds().overlaps(rocket.getBounds()) || moon.getBounds().overlaps(rocket.getBounds())){
            // System.out.println("preklapanje");
             dispose();
-            gsm.set(new GameOverState(gsm,rocket.getPoints()));
+            gsm.set(new GameOverState(gsm,rocket.getPoints(), false));
         }
 
         //raketa je izvan granice
         if (rocket.getPosition().x<0+leftLimitOffset || rocket.getPosition().x>GravityDemo1.WIDTH+rigthLimitOffset || rocket.getPosition().y<downLimit+GravityDemo1.HEIGHT/2){
             dispose();
-            gsm.set(new GameOverState(gsm,rocket.getPoints()));
+            gsm.set(new GameOverState(gsm,rocket.getPoints(), false));
         }
 
 
@@ -329,7 +329,7 @@ public class PlayState extends State {
                         else { WORMHOLE } (zasad placeholder zaustavi igru)
                     */
                     dispose();
-                    gsm.set(new GameOverState(gsm,rocket.getPoints()));
+                    gsm.set(new GameOverState(gsm,rocket.getPoints(), true));
                 }
 
                 int rad = 60 + brojacPlaneta * 10;
