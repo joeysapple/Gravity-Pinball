@@ -2,10 +2,15 @@ package com.matija.gravitydemo1.states;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.matija.gravitydemo1.states.Menus;
 import com.badlogic.gdx.math.Vector2;
@@ -20,42 +25,30 @@ public class HelpState extends State{
     private Texture backBtn;
     private Texture title;
     private Rectangle boundBack;
-    private TextButton helpText;
-    private Skin skin;
-    Preferences pref = Gdx.app.getPreferences("Highscore");
+
+    private BitmapFont font;
+    private FreeTypeFontGenerator fontGen = new FreeTypeFontGenerator(Gdx.files.internal("Comic_sans.ttf"));
+    FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+    private String text = "Use the touchpad to\nnavigate your rocket\nagainst the planet's\ngravity. Once you clear\nthe planet's gravity" +
+            "\nfield you get 5 points. \nIf you manage to pass \nbetween the planet and \nit's satellite you get \nadditional 20 points. In\norder" +
+            "to win the game you\nhave to clear 10 planets.";
+
+
     public HelpState(GameStateManager gsm) {
         super(gsm);
         //za mob
         cam.setToOrtho(false, Menus.WIDTH/2, Menus.HEIGHT /2);
-
         background = new Texture("background.png");
         title = new Texture("help.png");
         backBtn = new Texture("button_back.png");
+        boundBack=new Rectangle(cam.position.x - backBtn.getWidth() / 2, cam.position.y*0.15f,backBtn.getWidth(),backBtn.getHeight());
 
-        //Smooth
-        background.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        title.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        backBtn.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-
-        boundBack=new Rectangle(cam.position.x - backBtn.getWidth() / 2, cam.position.y*0.75f,backBtn.getWidth(),backBtn.getHeight());
-        //skin = new Skin();
-        //helpText = new TextButton("This is the help text", skin);
-        if( pref.getString("1", "No data").equals("No data")){
-            pref.putString("1", "a:10");
-        }
-        else{
-            String score = pref.getString("1", "aaa:0");
-            if (score.equals("")){
-                score = "aaa:0";
-            }
-            int val = Integer.parseInt(score.split(":")[1]);
-            String name = pref.getString("1").split(":")[0];
-            val += 10;
-            pref.putString("1", name+":"+Integer.toString(val) );
-        }
-        pref.flush();
-
-
+        parameter.size=15;
+        parameter.color= Color.WHITE;
+        parameter.borderColor= Color.BLACK;
+        parameter.borderWidth = 1;
+        font = fontGen.generateFont(parameter);
+        fontGen.dispose();
     }
 
     @Override
@@ -85,8 +78,9 @@ public class HelpState extends State{
         sb.begin();
         sb.draw(background, 0,0, Menus.WIDTH/2, Menus.HEIGHT /2);
         sb.draw(title, cam.position.x +7 - title.getWidth() / 2, cam.position.y*2f - title.getHeight()*1.1f);
-        sb.draw(backBtn, cam.position.x - backBtn.getWidth()/2, cam.position.y*0.75f);
-        //helpText.draw(sb, 0);
+        font.draw(sb, text, 25, cam.position.y*2f - title.getHeight()*1.3f);
+        sb.draw(backBtn, cam.position.x - backBtn.getWidth()/2, cam.position.y*0.15f);
+
         sb.end();
     }
 
