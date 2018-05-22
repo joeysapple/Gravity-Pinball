@@ -58,7 +58,7 @@ public class MenuState extends State{
                     gsm.set(new SecondLoadingState(gsm));
                 }
                 else {
-                    gsm.set(new PlayState(gsm));
+                    gsm.set(new RocketDisassembligState(gsm));
                 }
             }
             if(boundHelp.contains(tmp.x,tmp.y)) {

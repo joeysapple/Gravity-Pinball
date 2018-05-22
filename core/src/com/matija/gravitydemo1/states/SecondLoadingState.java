@@ -33,6 +33,6 @@ public class SecondLoadingState extends LoadingState {
 
     @Override
     protected void nextState() {
-        gsm.set(new PlayState(gsm));
+        gsm.set(new RocketDisassembligState(gsm));
     }
 }
