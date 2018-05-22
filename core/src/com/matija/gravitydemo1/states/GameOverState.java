@@ -62,6 +62,13 @@ public class GameOverState extends State{
         highBtn = new Texture("button_highscore.png");
         saveBtn = new Texture("button_save.png");
 
+
+        //Smooth
+        background.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        menuBtn.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        highBtn.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        saveBtn.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+
         boundHigh=new Rectangle(cam.position.x*1.05f, cam.position.y*0.25f-highBtn.getHeight(),highBtn.getWidth(),highBtn.getHeight());
         boundMenu=new Rectangle(cam.position.x - menuBtn.getWidth()*1.05f, cam.position.y*0.25f-menuBtn.getHeight(),menuBtn.getWidth(),menuBtn.getHeight());
         boundSave=new Rectangle(cam.position.x - saveBtn.getWidth()/2, cam.position.y*0.25f-saveBtn.getHeight(),saveBtn.getWidth(),saveBtn.getHeight());
@@ -97,6 +104,11 @@ public class GameOverState extends State{
         parameter.flip=false;
         parameter.size=30;
         scoreFont=fontGen.generateFont(parameter);
+
+        //Smooth
+        font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        fontFlipped.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        scoreFont.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
         fontGen.dispose();
     }

@@ -37,6 +37,7 @@ public class MenuState extends State{
         hsBtn.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         helpBtn.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         exitBtn.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        playSpaceBtn.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
         boundPlay=new Rectangle(cam.position.x - playBtn.getWidth() / 2, cam.position.y*1.25f,playBtn.getWidth(),playBtn.getHeight());
         boundSpace=new Rectangle(cam.position.x - playSpaceBtn.getWidth() / 2, cam.position.y*1f,playSpaceBtn.getWidth(),playSpaceBtn.getHeight());
